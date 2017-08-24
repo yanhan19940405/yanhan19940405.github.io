@@ -3,19 +3,19 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2017 | OBJECT</title>
+  <title>Archives: 2017 | Object</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="TEST">
+  <meta name="description" content="自我学习之地">
 <meta property="og:type" content="website">
-<meta property="og:title" content="OBJECT">
+<meta property="og:title" content="Object">
 <meta property="og:url" content="https://yanhan19940405.github.io/archives/2017/index.html">
-<meta property="og:site_name" content="OBJECT">
-<meta property="og:description" content="TEST">
+<meta property="og:site_name" content="Object">
+<meta property="og:description" content="自我学习之地">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="OBJECT">
-<meta name="twitter:description" content="TEST">
+<meta name="twitter:title" content="Object">
+<meta name="twitter:description" content="自我学习之地">
   
-    <link rel="alternate" href="/atom.xml" title="OBJECT" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Object" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -36,11 +36,11 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">OBJECT</a>
+        <a href="/" id="logo">Object</a>
       </h1>
       
         <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">TEST</a>
+          <a href="/" id="subtitle">未时�实践之事，无评判之力�理</a>
         </h2>
       
     </div>
@@ -167,10 +167,48 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2017 YH<br>
+      &copy; 2017 YH-VK17824<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
+  {% if theme.gitment.enable %}
+   {% set owner = theme.gitment.githubID %}
+   {% set repo = theme.gitment.repo %}
+   {% set cid = theme.gitment.ClientID %}
+   {% set cs = theme.gitment.ClientSecret %}
+   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+   {% if not theme.gitment.lazy %}
+       <script type="text/javascript">
+           var gitment = new Gitment({
+               id: document.location.href, 
+               owner: '{{yanhan19940405}}',
+               repo: '{{yanhan19940405.github.io}}',
+               oauth: {
+                   client_id: '{{1d0069a19c07bab5013a}}',
+                   client_secret: '{{811a87153c5dab721953c7d034810882eb5fe036}}',
+               }});
+           gitment.render('gitment-container');
+       </script>
+   {% else %}
+       <script type="text/javascript">
+           function ShowGitment(){
+               document.getElementById("gitment-display-button").style.display = "none";
+               document.getElementById("gitment-container").style.display = "block";
+               var gitment = new Gitment({
+                    id: document.location.href, 
+               owner: '{{yanhan19940405}}',
+               repo: '{{yanhan19940405.github.io}}',
+               oauth: {
+                   client_id: '{{1d0069a19c07bab5013a}}',
+                   client_secret: '{{811a87153c5dab721953c7d034810882eb5fe036}}',
+                   }});
+               gitment.render('gitment-container');
+           }
+       </script>
+   {% endif %}
+{% endif %}
+
 </footer>
     </div>
     <nav id="mobile-nav">
