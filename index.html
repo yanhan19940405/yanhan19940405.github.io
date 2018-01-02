@@ -257,6 +257,159 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YH-VK17824">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Object">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/20/JS-ES6-实践记录-三/" itemprop="url">JS(ES6)实践记录(三)</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T12:09:40+08:00">
+                2017-09-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。<br><strong>1.ES6中默认参数</strong><br>在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：</p>
+<blockquote>
+<p>**function makerequest(url,timeout=2000,callback=functio(){}){<br>    //函数其余部分<br>}</p>
+</blockquote>
+<p>**<br>&gt;<br>其中，url为必须参数，其余两个参数为默认参数.对于函数默认参数而言，个数没有限定。在ES6中，如果一个函数使用了默认参数值，则无论是否显式定义了严格模式，arguments对象行为与ES5严格模式保持一致。默认参数值存在使得arguments对象保持与命名参数分离，默认参数在函数中的变化不会导致arguments对象改变。比如:</p>
+<blockquote>
+<p>**function mixArgs(first,second=”b”){<br>    console.log(arguments.length);//1<br>    console.log(first===arguments[0]);//true<br>    console.log(second===arguments[1]);//false</p>
+</blockquote>
+<pre><code>first=&quot;c&quot;;
+secod=&quot;d&quot;;
+console.log(first===arguments[0]);//false
+console.log(second===arguments[1]);//false
+</code></pre><p>}</p>
+<p>mixArgs(“a”)<br>**<br>&gt;</p>
+<p>此例子在ES6中，只给mixArgs传入了一个参数字符串a，因此arguments元素构成的数组只有一个元素字符串a，故其长度为1，且会一直为初始值，不会受函数内部变量变化影响。<br>对于默认参数表达式而言，函数可以通过非原始传参从而得到默认参数的值，示例如下：</p>
+<blockquote>
+<p>**let value=”5”;</p>
+</blockquote>
+<p>function getvalue(){<br>    return value++;<br>}<br>function add(first,second=getvalue()){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//6<br>console.log(add(1));//7<br>**<br>&gt;<br>在此示例中，初次解析函数声明时不会调用getvalue（）方法，只有当调用add()方法并传入第二个参数时才会调用。变量value初始值为5，每次调用getvalue()方法时加1.第一次调用add(1)，只传入一个参数，没有传入第二个参数，所以执行函数getvalue，使得second默认值变为5，之后代入到函数add()中执行得到6，后面在执行add（1）与之同理。在执行add(1,1)时，直接执行逻辑“1+1”即可返回2.由此观之在没有传入具体参数赋予默认参数时，函数执行过程中任何时候都可以改变其值。<br>除了上面函数传值外，还有一种是固定参数与默认参数之间传值，比如:</p>
+<blockquote>
+<p>**function getvalue(value){<br>    return value+5;<br>}</p>
+</blockquote>
+<p>function add(first,second=getvalue(first)){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//7<br>**<br>&gt;</p>
+<p>在这个示例中，声明second=getvalue(first),所以尽管add(1,1)返回是2，但在执行默认参数为变量的函数值时，执行add(1)返回(1+6)即为7.除此外，还要注意。在引用默认参数时，只允许后面的参数引用前面参数的值，即先定义的参数不能访问后面的参数值，否则会抛出错误。<br><strong>2.ES6中不定参数</strong><br>在函数命名前加三个点（…）就表明这是一个不定参数，该参数为一个数组，包含着自它之后传入的所有参数，通过这个数组名即可逐一访问里面的参数。代码示例如下：</p>
+<blockquote>
+<p>**function pick(object,…keys){<br>    let result = object.create(null);</p>
+</blockquote>
+<pre><code>for (let i=0,len=keys.length;i&lt;len;i++){
+    result[keys[i]] = object[keys[i]];
+}
+return result;
+</code></pre><p>}</p>
+<p>**<br>&gt;</p>
+<p>在这个示例中，不定参数keys包含的是object之后传入的所有参数，除此外需要注意每个函数最多只能声明一个不定参数而且一定要包含在末尾。注意，函数的length属性统计的是函数命名参数数量，不定参数的加入不会影响length属性的值。在本示例中，只会pick()函数length值为1，因为只会计算object。<br><strong>3.展开运算符</strong></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/14/JS-ES6-实践记录-二/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -818,126 +971,6 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/08/22/react-blog/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="YH-VK17824">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Object">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/22/react-blog/" itemprop="url">react-blog</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-22T19:13:26+08:00">
-                2017-08-22
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>test</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/08/22/public/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1010,6 +1043,126 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
         
           
             <p>文章发布测试V2.0<br><img src="https://yanhan19940405.github.io/images/avatar.png" alt=""></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/08/22/react-blog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YH-VK17824">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Object">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/22/react-blog/" itemprop="url">react-blog</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-22T19:13:26+08:00">
+                2017-08-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>test</p>
 
           
         
@@ -1293,7 +1446,7 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-count">8</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1339,7 +1492,7 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
