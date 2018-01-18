@@ -95,28 +95,16 @@
 
 
 
-<meta name="description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
-
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
+<meta name="description" content="基于Node.js的开发技术1.Github;2.VUE.JS;3.vue.js论坛;4.iview2.0 UI库，这是vue,js专有UI库;5.segmentfault,IT技术讨论社区;6.react小书,react技术入门必备;7.Webpack很好地总结资料，搭建脚手架基础的资料;8.Webpack中文文档，很好地文档资料;9.Fetch交互方式，基于promise前后端异步交互方法;1">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS(ES6)实践记录(三)">
-<meta property="og:url" content="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/index.html">
+<meta property="og:title" content="WY's FE Resources">
+<meta property="og:url" content="https://yanhan19940405.github.io/2018/01/18/Resources/index.html">
 <meta property="og:site_name" content="Object">
-<meta property="og:description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
-
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
-<meta property="og:updated_time" content="2017-09-22T04:25:45.380Z">
+<meta property="og:description" content="基于Node.js的开发技术1.Github;2.VUE.JS;3.vue.js论坛;4.iview2.0 UI库，这是vue,js专有UI库;5.segmentfault,IT技术讨论社区;6.react小书,react技术入门必备;7.Webpack很好地总结资料，搭建脚手架基础的资料;8.Webpack中文文档，很好地文档资料;9.Fetch交互方式，基于promise前后端异步交互方法;1">
+<meta property="og:updated_time" content="2018-01-18T13:38:16.964Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS(ES6)实践记录(三)">
-<meta name="twitter:description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
-
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
+<meta name="twitter:title" content="WY's FE Resources">
+<meta name="twitter:description" content="基于Node.js的开发技术1.Github;2.VUE.JS;3.vue.js论坛;4.iview2.0 UI库，这是vue,js专有UI库;5.segmentfault,IT技术讨论社区;6.react小书,react技术入门必备;7.Webpack很好地总结资料，搭建脚手架基础的资料;8.Webpack中文文档，很好地文档资料;9.Fetch交互方式，基于promise前后端异步交互方法;1">
 
 
 
@@ -146,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/"/>
+  <link rel="canonical" href="https://yanhan19940405.github.io/2018/01/18/Resources/"/>
 
 
 
 
 
-  <title>JS(ES6)实践记录(三) | Object</title>
+  <title>WY's FE Resources | Object</title>
   
 
 
@@ -269,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/01/18/Resources/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YH-VK17824">
@@ -286,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JS(ES6)实践记录(三)</h1>
+          <h1 class="post-title" itemprop="name headline">WY's FE Resources</h1>
         
 
         <div class="post-meta">
@@ -298,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T12:09:40+08:00">
-                2017-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T20:47:42+08:00">
+                2018-01-18
               </time>
             
 
@@ -336,40 +324,7 @@
       
 
       
-        <p>这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。<br><strong>1.ES6中默认参数</strong><br>在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：</p>
-<blockquote>
-<p>**function makerequest(url,timeout=2000,callback=functio(){}){<br>    //函数其余部分<br>}</p>
-</blockquote>
-<p>**<br>&gt;<br>其中，url为必须参数，其余两个参数为默认参数.对于函数默认参数而言，个数没有限定。在ES6中，如果一个函数使用了默认参数值，则无论是否显式定义了严格模式，arguments对象行为与ES5严格模式保持一致。默认参数值存在使得arguments对象保持与命名参数分离，默认参数在函数中的变化不会导致arguments对象改变。比如:</p>
-<blockquote>
-<p>**function mixArgs(first,second=”b”){<br>    console.log(arguments.length);//1<br>    console.log(first===arguments[0]);//true<br>    console.log(second===arguments[1]);//false</p>
-</blockquote>
-<pre><code>first=&quot;c&quot;;
-secod=&quot;d&quot;;
-console.log(first===arguments[0]);//false
-console.log(second===arguments[1]);//false
-</code></pre><p>}</p>
-<p>mixArgs(“a”)<br>**<br>&gt;</p>
-<p>此例子在ES6中，只给mixArgs传入了一个参数字符串a，因此arguments元素构成的数组只有一个元素字符串a，故其长度为1，且会一直为初始值，不会受函数内部变量变化影响。<br>对于默认参数表达式而言，函数可以通过非原始传参从而得到默认参数的值，示例如下：</p>
-<blockquote>
-<p>**let value=”5”;</p>
-</blockquote>
-<p>function getvalue(){<br>    return value++;<br>}<br>function add(first,second=getvalue()){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//6<br>console.log(add(1));//7<br>**<br>&gt;<br>在此示例中，初次解析函数声明时不会调用getvalue（）方法，只有当调用add()方法并传入第二个参数时才会调用。变量value初始值为5，每次调用getvalue()方法时加1.第一次调用add(1)，只传入一个参数，没有传入第二个参数，所以执行函数getvalue，使得second默认值变为5，之后代入到函数add()中执行得到6，后面在执行add（1）与之同理。在执行add(1,1)时，直接执行逻辑“1+1”即可返回2.由此观之在没有传入具体参数赋予默认参数时，函数执行过程中任何时候都可以改变其值。<br>除了上面函数传值外，还有一种是固定参数与默认参数之间传值，比如:</p>
-<blockquote>
-<p>**function getvalue(value){<br>    return value+5;<br>}</p>
-</blockquote>
-<p>function add(first,second=getvalue(first)){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//7<br>**<br>&gt;</p>
-<p>在这个示例中，声明second=getvalue(first),所以尽管add(1,1)返回是2，但在执行默认参数为变量的函数值时，执行add(1)返回(1+6)即为7.除此外，还要注意。在引用默认参数时，只允许后面的参数引用前面参数的值，即先定义的参数不能访问后面的参数值，否则会抛出错误。<br><strong>2.ES6中不定参数</strong><br>在函数命名前加三个点（…）就表明这是一个不定参数，该参数为一个数组，包含着自它之后传入的所有参数，通过这个数组名即可逐一访问里面的参数。代码示例如下：</p>
-<blockquote>
-<p>**function pick(object,…keys){<br>    let result = object.create(null);</p>
-</blockquote>
-<pre><code>for (let i=0,len=keys.length;i&lt;len;i++){
-    result[keys[i]] = object[keys[i]];
-}
-return result;
-</code></pre><p>}</p>
-<p>**<br>&gt;</p>
-<p>在这个示例中，不定参数keys包含的是object之后传入的所有参数，除此外需要注意每个函数最多只能声明一个不定参数而且一定要包含在末尾。注意，函数的length属性统计的是函数命名参数数量，不定参数的加入不会影响length属性的值。在本示例中，只会pick()函数length值为1，因为只会计算object。<br><strong>3.展开运算符</strong></p>
+        <p><strong>基于Node.js的开发技术</strong><br>1.<a href="https://github.com" target="_blank" rel="external">Github</a>;<br>2.<a href="https://cn.vuejs.org/" target="_blank" rel="external">VUE.JS</a>;<br>3.<a href="https://www.vue-js.com/" target="_blank" rel="external">vue.js论坛</a>;<br>4.<a href="https://www.iviewui.com/" target="_blank" rel="external">iview2.0 UI库</a>，这是vue,js专有UI库;<br>5.<a href="https://segmentfault.com/" target="_blank" rel="external">segmentfault</a>,IT技术讨论社区;<br>6.<a href="http://huziketang.com/books/react/" target="_blank" rel="external">react小书</a>,react技术入门必备;<br>7.<a href="https://www.jianshu.com/p/42e11515c10f" target="_blank" rel="external">Webpack很好地总结资料</a>，搭建脚手架基础的资料;<br>8.<a href="https://doc.webpack-china.org/" target="_blank" rel="external">Webpack中文文档</a>，很好地文档资料;<br>9.<a href="https://segmentfault.com/a/1190000007019545" target="_blank" rel="external">Fetch交互方式</a>，基于promise前后端异步交互方法;<br>10.<a href="https://www.kancloud.cn/yunye/axios/234845" target="_blank" rel="external">Axios中文文档</a>，前后端交互方式文档，与fetch不一样;<br>11.<a href="https://ant.design/docs/react/introduce-cn" target="_blank" rel="external">Ant Design</a>，这是react技术广泛使用的UI库;<br>12.<a href="https://motion.ant.design/" target="_blank" rel="external">Ant Motion</a>，这是基于react的动画解决方案;<br>13.<a href="http://www.expressjs.com.cn/" target="_blank" rel="external">Express</a>，基于node.js的前端调试服务器，可以解决跨域访问问题与其他模拟后端请求问题;<br>14.<a href="https://www.v2ex.com/" target="_blank" rel="external">V2EX</a>，这是技术解决方案的讨论平台;<br>15.<a href="https://stackoverflow.com/" target="_blank" rel="external">Stack Overflow</a>，在线技术交流平台;<br>16.<a href="http://jsbin.com/" target="_blank" rel="external">jsbin</a>，在线JS代码编写调试工具;<br>17.<a href="http://www.runoob.com/mongodb/mongodb-tutorial.html" target="_blank" rel="external">Mongodb</a>，数据库教程;<br>18.<a href="http://echarts.baidu.com/" target="_blank" rel="external">Echart</a>，百度推出的数据可视化库;<br>19.<a href="http://www.ourd3js.com/wordpress/396/" target="_blank" rel="external">D3.js</a>另一种功能强大的数据可视化库;<br><strong>基于原生体系的开发技术</strong><br>1.<a href="http://fis.baidu.com/" target="_blank" rel="external">FIS</a>，百度推出的前端调试服务器;<br>2.<a href="http://www.jq22.com" target="_blank" rel="external">JQ与bootstrap常用效果库</a>;<br>3.<a href="http://layoutit.justjavac.com/" target="_blank" rel="external">Bootstrap可视化布局</a>,在线进行页面布局，生成相应bootstrap代码。</p>
 
       
     </div>
@@ -394,8 +349,8 @@ return result;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/14/JS-ES6-实践记录-二/" rel="next" title="JS(ES6)实践记录(二)">
-                <i class="fa fa-chevron-left"></i> JS(ES6)实践记录(二)
+              <a href="/2017/09/20/JS-ES6-实践记录-三/" rel="next" title="JS(ES6)实践记录(三)">
+                <i class="fa fa-chevron-left"></i> JS(ES6)实践记录(三)
               </a>
             
           </div>
@@ -404,8 +359,8 @@ return result;
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/01/18/Resources/" rel="prev" title="WY's FE Resources">
-                WY's FE Resources <i class="fa fa-chevron-right"></i>
+              <a href="/2018/01/18/ES6/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
