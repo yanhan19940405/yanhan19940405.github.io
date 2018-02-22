@@ -257,6 +257,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/02/22/机器学习算法实践之KNN算法/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YH-VK17824">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Object">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/02/22/机器学习算法实践之KNN算法/" itemprop="url">机器学习算法实践之KNN算法</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-22T08:57:28+08:00">
+                2018-02-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p><strong>1.KNN算法前置概念</strong><br>在进行算法基本描述前，先介绍两个概念。对于数据分类算法中，一般性应用场景即为监督学习。监督学习方法分为生成方法和判别方法，最终所得到的模型即为生成模型和判别模型。生成方法由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测模型。该模型特点在于表现了给定输入X产生输出Y的生成关系，是基于数据出发所触发的模型学习过程，其可以还原出联合概率分布P(X,Y)，判别方法不能。除此外，生成方法学习收敛速度更快，当样本容量增加的时候，学到的模型可以更快的收敛于真实模型。典型的生成模型有：朴素贝叶斯法和隐马尔可夫模型。<br>判别方法是由数据直接学习决策函数f(X)或者条件概率分布P(Y|X)作为预测的模型，此处待引入训练数据后，由具体训练数据集得出函数模型后，带入具体测试数据集的得出具体数据分类结论即可。判别方法直接面对预测，学习准确率更高。此处需要注意的是，在存在数据特征预处理不完善或者其他无法量化所有特征参数情况下，一旦存在隐变量，判别方法则无法使用，但可以使用生成方法。判别模型有K近邻法，感知机，决策树，logistic回归模型等。<br><strong>2.KNN算法基础理论描述</strong><br>KNN算法，即为K近邻算法，其最简单的描述即为:给定一个训练数据集，将其分好类之后，对于新输入的实例，在训练数据集中找到与该实例最邻近的K个示例，这K个示例多数属于某一类，就将该输入实例分为这一类。鉴于此，我们讨论下算法核心思想，距离度量。<br><strong><strong>2.1KNN算法距离度量</strong></strong><br>在训练数据集给定的情况下，找到具体数据每一项特征向量，将其结合在一起构成一个特征向量集合，即为特征空间。在使用欧式距离公式（公式如下图所示）:<img src="http://img.blog.csdn.net/20161123194009176?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="图1:欧式距离"><br>运用特征空间里的参数将其实例之间的欧式距离计算出来，结果数值越小则两个实例点几何距离越近，分类结果越相似。<br><strong><strong>2.2 K值选择</strong></strong><br>k值的选择也要在偏差与方差之间取得平衡。若k取很小，例如k=1，则分类结果容易因为近似误差减小而出现错误，导致只有与输入实例相近的训练实例才会有分类效果，其他实例则无法准确分类，容易发生过拟合现象；若k取很大，例如k=N(N为训练集的样本数），则对所有测试样本而言，其利用较大领域范围中的训练实例进行预测。与输入实例较远的训练实例也会对预测产生作用，使得近似误差增大，使得预测产生错误。利用交叉验证（Cross Validation）评估一系列不同的k值，选取结果最好的k值作为训练参数。此文中数据情况简单，K值就取的是5即可达成需要。<br><strong><strong>2.3 分类决策规则</strong></strong><br>算法中的分类决策规则为多数表决，即由输入实例的K个近邻的实例中的多数类来决定该输入实例所属分类情况。<br><strong>3.KNN算法分类步骤</strong></p>
+<blockquote>
+<ul>
+<li>求输入实例与训练样本之间的相似性</li>
+<li>依据欧式距离数值从小到大排序</li>
+<li>选择前K个最为相似的数据中，多数相同分类样本对应的类别</li>
+<li>得到输入实例预测的分类结果。<br><strong>4.KNN算法实践</strong><br>具体代码我已上传至Git仓库，详情请<a href="https://github.com/yanhan19940405/MachineLearning-algorithm/tree/master/KNN" target="_blank" rel="external">点击查看</a>，数据来源于kaggle上某约会网站训练数据，具体仓库中有，最终数据可视化展示结果如下图所示:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-688087e644ba4143.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="图2 数据分类结果图"><br>到此，此算法大致就结束了。</li>
+</ul>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/01/18/Resources/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1206,7 +1334,7 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-count">7</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

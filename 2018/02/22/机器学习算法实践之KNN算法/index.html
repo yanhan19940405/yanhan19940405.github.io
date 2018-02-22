@@ -95,16 +95,19 @@
 
 
 
-<meta name="description" content="Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。1.var申明与变量提升机制  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变">
+<meta name="description" content="1.KNN算法前置概念在进行算法基本描述前，先介绍两个概念。对于数据分类算法中，一般性应用场景即为监督学习。监督学习方法分为生成方法和判别方法，最终所得到的模型即为生成模型和判别模型。生成方法由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测模型。该模型特点在于表现了给定输入X产生输出Y的生成关系，是基于数据出发所触发的模型学习过程，其可以还原出联合概率分布P(X,Y)，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS(ES6)实践记录一">
-<meta property="og:url" content="https://yanhan19940405.github.io/2017/09/13/JS-ES6-实践记录/index.html">
+<meta property="og:title" content="机器学习算法实践之KNN算法">
+<meta property="og:url" content="https://yanhan19940405.github.io/2018/02/22/机器学习算法实践之KNN算法/index.html">
 <meta property="og:site_name" content="Object">
-<meta property="og:description" content="Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。1.var申明与变量提升机制  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变">
-<meta property="og:updated_time" content="2017-09-14T00:14:10.979Z">
+<meta property="og:description" content="1.KNN算法前置概念在进行算法基本描述前，先介绍两个概念。对于数据分类算法中，一般性应用场景即为监督学习。监督学习方法分为生成方法和判别方法，最终所得到的模型即为生成模型和判别模型。生成方法由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测模型。该模型特点在于表现了给定输入X产生输出Y的生成关系，是基于数据出发所触发的模型学习过程，其可以还原出联合概率分布P(X,Y)，">
+<meta property="og:image" content="http://img.blog.csdn.net/20161123194009176?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-688087e644ba4143.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
+<meta property="og:updated_time" content="2018-02-22T02:56:43.562Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS(ES6)实践记录一">
-<meta name="twitter:description" content="Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。1.var申明与变量提升机制  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变">
+<meta name="twitter:title" content="机器学习算法实践之KNN算法">
+<meta name="twitter:description" content="1.KNN算法前置概念在进行算法基本描述前，先介绍两个概念。对于数据分类算法中，一般性应用场景即为监督学习。监督学习方法分为生成方法和判别方法，最终所得到的模型即为生成模型和判别模型。生成方法由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测模型。该模型特点在于表现了给定输入X产生输出Y的生成关系，是基于数据出发所触发的模型学习过程，其可以还原出联合概率分布P(X,Y)，">
+<meta name="twitter:image" content="http://img.blog.csdn.net/20161123194009176?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center">
 
 
 
@@ -134,13 +137,13 @@
 
 
 
-  <link rel="canonical" href="https://yanhan19940405.github.io/2017/09/13/JS-ES6-实践记录/"/>
+  <link rel="canonical" href="https://yanhan19940405.github.io/2018/02/22/机器学习算法实践之KNN算法/"/>
 
 
 
 
 
-  <title>JS(ES6)实践记录一 | Object</title>
+  <title>机器学习算法实践之KNN算法 | Object</title>
   
 
 
@@ -257,7 +260,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/13/JS-ES6-实践记录/">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/02/22/机器学习算法实践之KNN算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YH-VK17824">
@@ -274,7 +277,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JS(ES6)实践记录一</h1>
+          <h1 class="post-title" itemprop="name headline">机器学习算法实践之KNN算法</h1>
         
 
         <div class="post-meta">
@@ -286,8 +289,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T15:36:32+08:00">
-                2017-09-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-22T08:57:28+08:00">
+                2018-02-22
               </time>
             
 
@@ -324,31 +327,15 @@
       
 
       
-        <p>Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。<br><strong>1.var申明与变量提升机制</strong><br>  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变量提升机制。比如以下代码：</p>
+        <p><strong>1.KNN算法前置概念</strong><br>在进行算法基本描述前，先介绍两个概念。对于数据分类算法中，一般性应用场景即为监督学习。监督学习方法分为生成方法和判别方法，最终所得到的模型即为生成模型和判别模型。生成方法由数据学习联合概率分布P(X,Y)，然后求出条件概率分布P(Y|X)作为预测模型。该模型特点在于表现了给定输入X产生输出Y的生成关系，是基于数据出发所触发的模型学习过程，其可以还原出联合概率分布P(X,Y)，判别方法不能。除此外，生成方法学习收敛速度更快，当样本容量增加的时候，学到的模型可以更快的收敛于真实模型。典型的生成模型有：朴素贝叶斯法和隐马尔可夫模型。<br>判别方法是由数据直接学习决策函数f(X)或者条件概率分布P(Y|X)作为预测的模型，此处待引入训练数据后，由具体训练数据集得出函数模型后，带入具体测试数据集的得出具体数据分类结论即可。判别方法直接面对预测，学习准确率更高。此处需要注意的是，在存在数据特征预处理不完善或者其他无法量化所有特征参数情况下，一旦存在隐变量，判别方法则无法使用，但可以使用生成方法。判别模型有K近邻法，感知机，决策树，logistic回归模型等。<br><strong>2.KNN算法基础理论描述</strong><br>KNN算法，即为K近邻算法，其最简单的描述即为:给定一个训练数据集，将其分好类之后，对于新输入的实例，在训练数据集中找到与该实例最邻近的K个示例，这K个示例多数属于某一类，就将该输入实例分为这一类。鉴于此，我们讨论下算法核心思想，距离度量。<br><strong><strong>2.1KNN算法距离度量</strong></strong><br>在训练数据集给定的情况下，找到具体数据每一项特征向量，将其结合在一起构成一个特征向量集合，即为特征空间。在使用欧式距离公式（公式如下图所示）:<img src="http://img.blog.csdn.net/20161123194009176?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQv/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/Center" alt="图1:欧式距离"><br>运用特征空间里的参数将其实例之间的欧式距离计算出来，结果数值越小则两个实例点几何距离越近，分类结果越相似。<br><strong><strong>2.2 K值选择</strong></strong><br>k值的选择也要在偏差与方差之间取得平衡。若k取很小，例如k=1，则分类结果容易因为近似误差减小而出现错误，导致只有与输入实例相近的训练实例才会有分类效果，其他实例则无法准确分类，容易发生过拟合现象；若k取很大，例如k=N(N为训练集的样本数），则对所有测试样本而言，其利用较大领域范围中的训练实例进行预测。与输入实例较远的训练实例也会对预测产生作用，使得近似误差增大，使得预测产生错误。利用交叉验证（Cross Validation）评估一系列不同的k值，选取结果最好的k值作为训练参数。此文中数据情况简单，K值就取的是5即可达成需要。<br><strong><strong>2.3 分类决策规则</strong></strong><br>算法中的分类决策规则为多数表决，即由输入实例的K个近邻的实例中的多数类来决定该输入实例所属分类情况。<br><strong>3.KNN算法分类步骤</strong></p>
 <blockquote>
-<p><strong>function getvalue(condition){<br>  if(condition){<br>  var value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
-<p>由于在JS函数预编译阶段，变量value的声明会被提升只函数顶部，其他条件判断依然在远处，从而导致else语句能访问到value变量，由于变量value尚未初始化，从而返回值为undefined。因此，此处对于没有块级作用域的ES5标准下的js开发者带来了困惑。</p>
+<ul>
+<li>求输入实例与训练样本之间的相似性</li>
+<li>依据欧式距离数值从小到大排序</li>
+<li>选择前K个最为相似的数据中，多数相同分类样本对应的类别</li>
+<li>得到输入实例预测的分类结果。<br><strong>4.KNN算法实践</strong><br>具体代码我已上传至Git仓库，详情请<a href="https://github.com/yanhan19940405/MachineLearning-algorithm/tree/master/KNN" target="_blank" rel="external">点击查看</a>，数据来源于kaggle上某约会网站训练数据，具体仓库中有，最终数据可视化展示结果如下图所示:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-688087e644ba4143.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="图2 数据分类结果图"><br>到此，此算法大致就结束了。</li>
+</ul>
 </blockquote>
-<p><strong>2.块级声明</strong><br>在ES6中，JS作用域分为全局作用域，块级作用域，局部作用域。其中块级声明用于声明在指定块之外无法访问的变量。块级作用域存在于：函数内部，{}包含的块中。<br><strong><strong>2.1 Let声明</strong></strong><br>let用法与var相同，但用let代替var声明变量，会将变量作用域限制在当前代码块中。具体代码示例如下：</p>
-<blockquote>
-<p><strong>function getvalue(condition){<br>  if(condition){<br>  let value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
-<p>与以上例子对比可知，通过let声明变量value后，变量不会提升至函数顶部。当执行流离开if程序块后，value立即被销毁，则如果condition值为布尔值false时，就不会声明并初始化value的值，从而返回null。除此外，对于重声明情况，es5会后面变量覆盖前面变量的值，而在ES6中，在同一个作用域下严禁重声明，否则会抛出错误。<br><strong><strong>2.2 const声明</strong></strong><br>使用const声明的是常量，其值不可更改，类似于Python中tuple元素一样。每一个const声明的常量必须初始化才有意义。其和let类似，皆声明创建一个块级作用域，域外变量无法访问域内常量。同时常量也不会提升至作用域顶部,示例如下：<br><strong>if(condition){<br>  var max=6;<br>  //更多代码<br>}<br>//此处无法访问max
-</strong></p>
-<p>在这段代码中，常量max在if程序块中执行后即刻销毁，在代码块外访问不到这个常量。除此外，const严禁重声明行为发生，会导致错误抛出情况的发生。<br><strong>3.临时死区（TDZ）</strong><br>Javascript引擎在代码执行时，先扫描代码，当发现变量声明时，若遇到var声明，将会把它们提升至作用域顶部。若遇到let和const声明，会将声明放置于TDZ中。因此，在没有执行过变量语句之前访问TDZ中的变量，就会报错。只有执行具体变量声明与初始化后，变量才会从TDZ中移出，然后可以正常访问。示例代码如下：<br><strong><br>if(condition){<br>    console.log(typeof value);//引用错误<br>    let value=”blue”<br>}</strong></p>
-<p>在以上代码实例中，console.log语句会导致抛出错误。由于let定义并初始化变量value的语句不会执行，其还位于”临时死区”中，这种现象明显的展现出let，const这类声明的变量不提升的效果。<br><strong>4.循环中块级作用域绑定</strong><br>请看如下很常见的代码示例：<br>**<br>var a=[];<br>for(var i=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
-</blockquote>
-<p>a.forEach(function(func){<br>    func();<br>})**<br>&gt;<br>为了使得预期结果是输出数字0——10，故初步写出上述代码，结果发现输出了10次重复数字10，这是因为var在全局作用域下，任何局部作用域都能访问到，因此每次循环迭代都是共享着变量i，循环内部创建的函数全部保留了对于变量的引用情况。循环结束后变量i的值为10，覆盖了前面循环产出的数值，所以每次调用console.log就会输出数字10.因此若将var声明的变量i改为let进行声明，则每次循环时let声明都会创建一个新变量i，并将其初始化为当前的值，循环内部创建的每个函数都会得到属于他的值，因此会输出数字0-10.代码示例如下：</p>
-<blockquote>
-<p>**<br>var a=[];<br>for(var let=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
-</blockquote>
-<p>a.forEach(function(func){<br>    func();//0-10<br>})<strong><br>&gt;
-</strong>5.全局块级作用域绑定**<br>当var被用于全局作用域时，它会创建一个全局变量作为全局对象（window对象）的属性。因此用var可能会覆盖一个已经存在的全局变量而如果使用const和let声明变量，则不会破坏全局作用域，不会存在此种情况，具体三种情况代码示例如下:</p>
-<blockquote>
-<p>**<br>let request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
-</blockquote>
-<p>const request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
-<p>var RegExp=”hello test”;<br>console.log(RegExp);//hello test<br>console.log(window.RegExp==RegExp);//true**<br>&gt;</p>
-<p>由此可见，对于三种声明方式而言，块级作用域下声明更加安全可靠。let和const行为和var类似，但它们在循环中的行为却不一样。在循环中，let和const每一次迭代都会创建新的绑定，从而使循环体内创建的函数可以访问到相应迭代的值，而不是入var一样输出最后一次迭代的值。鉴于此，对于三种声明最佳实践方案是：默认情况下使用const，只有在确定需要改变变量值的时候使用let，循环最好使用let。全局作用域下，涉及跨window或者frame访问代码时最好使用var声明，这样可以避免一些错误，也能提升安全性。</p>
 
       
     </div>
@@ -373,8 +360,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/08/30/初步实践/" rel="next" title="python初步实践">
-                <i class="fa fa-chevron-left"></i> python初步实践
+              <a href="/2018/01/18/Resources/" rel="next" title="WY's FE Resources">
+                <i class="fa fa-chevron-left"></i> WY's FE Resources
               </a>
             
           </div>
@@ -382,10 +369,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/09/14/JS-ES6-实践记录-二/" rel="prev" title="JS(ES6)实践记录(二)">
-                JS(ES6)实践记录(二) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
