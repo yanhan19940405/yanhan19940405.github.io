@@ -257,6 +257,150 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/13/JS-ES6-实践记录/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YH-VK17824">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Object">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/JS-ES6-实践记录/" itemprop="url">JS(ES6)实践记录一</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T15:36:32+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。<br><strong>1.var申明与变量提升机制</strong><br>  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变量提升机制。比如以下代码：</p>
+<blockquote>
+<p><strong>function getvalue(condition){<br>  if(condition){<br>  var value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
+<p>由于在JS函数预编译阶段，变量value的声明会被提升只函数顶部，其他条件判断依然在远处，从而导致else语句能访问到value变量，由于变量value尚未初始化，从而返回值为undefined。因此，此处对于没有块级作用域的ES5标准下的js开发者带来了困惑。</p>
+</blockquote>
+<p><strong>2.块级声明</strong><br>在ES6中，JS作用域分为全局作用域，块级作用域，局部作用域。其中块级声明用于声明在指定块之外无法访问的变量。块级作用域存在于：函数内部，{}包含的块中。<br><strong><strong>2.1 Let声明</strong></strong><br>let用法与var相同，但用let代替var声明变量，会将变量作用域限制在当前代码块中。具体代码示例如下：</p>
+<blockquote>
+<p><strong>function getvalue(condition){<br>  if(condition){<br>  let value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
+<p>与以上例子对比可知，通过let声明变量value后，变量不会提升至函数顶部。当执行流离开if程序块后，value立即被销毁，则如果condition值为布尔值false时，就不会声明并初始化value的值，从而返回null。除此外，对于重声明情况，es5会后面变量覆盖前面变量的值，而在ES6中，在同一个作用域下严禁重声明，否则会抛出错误。<br><strong><strong>2.2 const声明</strong></strong><br>使用const声明的是常量，其值不可更改，类似于Python中tuple元素一样。每一个const声明的常量必须初始化才有意义。其和let类似，皆声明创建一个块级作用域，域外变量无法访问域内常量。同时常量也不会提升至作用域顶部,示例如下：<br><strong>if(condition){<br>  var max=6;<br>  //更多代码<br>}<br>//此处无法访问max
+</strong></p>
+<p>在这段代码中，常量max在if程序块中执行后即刻销毁，在代码块外访问不到这个常量。除此外，const严禁重声明行为发生，会导致错误抛出情况的发生。<br><strong>3.临时死区（TDZ）</strong><br>Javascript引擎在代码执行时，先扫描代码，当发现变量声明时，若遇到var声明，将会把它们提升至作用域顶部。若遇到let和const声明，会将声明放置于TDZ中。因此，在没有执行过变量语句之前访问TDZ中的变量，就会报错。只有执行具体变量声明与初始化后，变量才会从TDZ中移出，然后可以正常访问。示例代码如下：<br><strong><br>if(condition){<br>    console.log(typeof value);//引用错误<br>    let value=”blue”<br>}</strong></p>
+<p>在以上代码实例中，console.log语句会导致抛出错误。由于let定义并初始化变量value的语句不会执行，其还位于”临时死区”中，这种现象明显的展现出let，const这类声明的变量不提升的效果。<br><strong>4.循环中块级作用域绑定</strong><br>请看如下很常见的代码示例：<br>**<br>var a=[];<br>for(var i=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
+</blockquote>
+<p>a.forEach(function(func){<br>    func();<br>})**<br>&gt;<br>为了使得预期结果是输出数字0——10，故初步写出上述代码，结果发现输出了10次重复数字10，这是因为var在全局作用域下，任何局部作用域都能访问到，因此每次循环迭代都是共享着变量i，循环内部创建的函数全部保留了对于变量的引用情况。循环结束后变量i的值为10，覆盖了前面循环产出的数值，所以每次调用console.log就会输出数字10.因此若将var声明的变量i改为let进行声明，则每次循环时let声明都会创建一个新变量i，并将其初始化为当前的值，循环内部创建的每个函数都会得到属于他的值，因此会输出数字0-10.代码示例如下：</p>
+<blockquote>
+<p>**<br>var a=[];<br>for(var let=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
+</blockquote>
+<p>a.forEach(function(func){<br>    func();//0-10<br>})<strong><br>&gt;
+</strong>5.全局块级作用域绑定**<br>当var被用于全局作用域时，它会创建一个全局变量作为全局对象（window对象）的属性。因此用var可能会覆盖一个已经存在的全局变量而如果使用const和let声明变量，则不会破坏全局作用域，不会存在此种情况，具体三种情况代码示例如下:</p>
+<blockquote>
+<p>**<br>let request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
+</blockquote>
+<p>const request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
+<p>var RegExp=”hello test”;<br>console.log(RegExp);//hello test<br>console.log(window.RegExp==RegExp);//true**<br>&gt;</p>
+<p>由此可见，对于三种声明方式而言，块级作用域下声明更加安全可靠。let和const行为和var类似，但它们在循环中的行为却不一样。在循环中，let和const每一次迭代都会创建新的绑定，从而使循环体内创建的函数可以访问到相应迭代的值，而不是入var一样输出最后一次迭代的值。鉴于此，对于三种声明最佳实践方案是：默认情况下使用const，只有在确定需要改变变量值的时候使用let，循环最好使用let。全局作用域下，涉及跨window或者frame访问代码时最好使用var声明，这样可以避免一些错误，也能提升安全性。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/08/30/初步实践/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -623,7 +767,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

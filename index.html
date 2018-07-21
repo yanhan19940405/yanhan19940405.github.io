@@ -257,6 +257,126 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/07/21/文本数据挖掘六ae流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="YH-VK17824">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Object">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/07/21/文本数据挖掘六ae流程/" itemprop="url">文本数据挖掘流程</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-21T11:02:24+08:00">
+                2018-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。<br><strong>1.数据获取</strong><br>对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据，需要后期进一步处理。<br><strong>2.数据清洗与数据预处理</strong><br><strong><strong>2.1文本数据清洗</strong></strong><br>在获得的文本数据集，也叫语料库，里面含有许多无关的HTML标签，前端JS代码段，注释，无关特殊符号等增加训练噪声的数据，因此我们需要对数据进行处理，筛选掉这些无关数据项，技术上一般使用python正则表达式处理即可。最后，对于文本数据中的标点符号，可以剔除掉，用空格来代替。<br><strong><strong>2.2结构化数据</strong></strong><br>通过上述步骤处理后，我们就有了训练语料库。但对于文本数据挖掘而言，运用机器学习模型或者深度学习模型来训练的话还远远不够。对于监督学习，无监督学习，半监督学习而言，监督学习在文本数据瓦解运用上来看目前效果较好，也是最合理的方式。因此我们需要对文本进行打标签（label），这对于回归与分类问题而言具有重要意义。最后，我们要将不同网页的文本数据单独保存为一个文档，然后添加这个文档数据的标签，整个数据集就由多个带标签的文档构成，也叫作文档库。于是数据就有了词汇——》文档——》文档库这么一个简单结构，有利于构成训练矩阵。最后对于部分结构数据中存在的NAN数值项，在大文本训练情况下将这类数据删除即可，数据量小的可以用数值0代替。<br><strong><strong>2.3 分词</strong></strong><br>中文分词原因与处理过程请见我另一篇文本主题分类文章，这里不再详述。<br><strong>3.文本挖掘数值特征工程</strong><br>首先，文本数据集内部全是各种str类型的文本分词数据，这类结构无法直接带入到计算机中进行计算。因此我们需要将数据进一步处理成能够让计算机计算，标注的一种矩阵结构。目前做法一般分两种。<br><strong><strong>3.1词袋模型(BOW)</strong></strong><br>此类方式通过忽略分词语义特征与前后顺序，直接将所有分词放在一个统一的文档集合中，统计每一个分词出现的次数，最后得出一个矩阵。矩阵的列代表每一个分词的出现次数，矩阵的行代表文档数量，在这篇文档出现了的分词次数为m，就在那个位置标注为m即可，其他没出现的文档位置直接标注0，这类矩阵即为词频矩阵，其横向维度即为分词数目，长度会很长，因此对于低频词影响没法忽略掉，需要进一步特征筛选。最后，这类矩阵可以直接带入模型中训练。而目前大部分使用的TF-IDF算法效果较好，其引入了逆文档频率IDF，在词频概率TF基础上计算的词频矩阵能更好的契合主题分类模型。<br><strong><strong>3.2词向量模型</strong></strong><br>这种方式通过one-hot编码将分词序列化。举个例子，我有段文本“今天天气好晴朗”经过分词处理后的结构变为“今天”，“天气”，“好”，”晴朗“。那么通过one-hot编码处理后的每一个分词向量即为：<br>“今天”=[1,0,0,0],”天气”=[0,1,0,0],”好”=[0,0,1,0],”晴朗”=[0,0,0,1],最后这个句子（文档）的词向量模型即为[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]].这样不同的文档词向量矩阵组合在一起就构成了一类高维度的文档集合词向量，矩阵的列代表词表大小即为分词个数，行代表文档个数。但考虑到对于分词而言，每一个词向量列元素只有其所在位置标1，而其他位置全部标0，这会造成数据分布不均问题。所以上述简单处理方式外，还有word2vec,doc2vec,fasttext模型进一步优化处理（fasttext,word2vec模型分类过程后续详谈)。有一种基于哈夫曼树的正负训练方式值得关注，其将正负表示词语语序排布问题，在树上正负分别表示左右处理方向，对于语言相似性判断有极大作用。最后，词向量模型高度抽象，无法直接带入统计机器学习模型训练，所以最好与深度学习模型进行嵌入训练，效果最佳。<br><strong><strong>3.3特征选取</strong></strong><br>经过编码处理后的矩阵词库大小依然太大，全部带入模型训练的话，拟合起来可能速度太慢。因此需要选择数据量合适，表征能力强，区分度大，经过编码处理后的分词作为训练数据集的特征。因此具体问题就回到了传统数据挖掘数据特征选取问题，一般采用卡方检验，信息增益，随机森林算法进行特征提取即可。<br><strong>4.训练模型和调参</strong><br>这一步就需要看你选择的模型来操作了，从大体上来讲，模型需要对数据进行拟合，要达到相应精度要求，除了确保数据质量高，特征选取合适外，还需要合理的调参设置。为了增强具体模型预测的泛化性，设置合理的L1,L2正则化项也是需要考虑的。此部分就不展开说了，后续结合实例再谈。<br>最后整个文本数据挖掘流程大致如此了，后续可以在这样处理框架下细化操作即可。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/07/19/基于TFIDF-XGBoost文本主题分类/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1427,150 +1547,6 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/13/JS-ES6-实践记录/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="YH-VK17824">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.png">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Object">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/13/JS-ES6-实践记录/" itemprop="url">JS(ES6)实践记录一</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T15:36:32+08:00">
-                2017-09-13
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Javascript ES6标准自推广以来，使得js这门语言应用范围越来越广。很庆幸我在读研期间能够有时间对这门语言按照自己的方式系统性理解，学习，记录。在此我希望自己能够借此机会，能够虔诚的走上技术追寻的道路，以下就此开始Javascript旅程。<br><strong>1.var申明与变量提升机制</strong><br>  在ES5标准中常用var声明具体变量，无论在js代码过程中何处声明，期都会被当做当前作用域顶部声明的变量，这就是具体变量提升机制。比如以下代码：</p>
-<blockquote>
-<p><strong>function getvalue(condition){<br>  if(condition){<br>  var value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
-<p>由于在JS函数预编译阶段，变量value的声明会被提升只函数顶部，其他条件判断依然在远处，从而导致else语句能访问到value变量，由于变量value尚未初始化，从而返回值为undefined。因此，此处对于没有块级作用域的ES5标准下的js开发者带来了困惑。</p>
-</blockquote>
-<p><strong>2.块级声明</strong><br>在ES6中，JS作用域分为全局作用域，块级作用域，局部作用域。其中块级声明用于声明在指定块之外无法访问的变量。块级作用域存在于：函数内部，{}包含的块中。<br><strong><strong>2.1 Let声明</strong></strong><br>let用法与var相同，但用let代替var声明变量，会将变量作用域限制在当前代码块中。具体代码示例如下：</p>
-<blockquote>
-<p><strong>function getvalue(condition){<br>  if(condition){<br>  let value=”blue”;<br>  return value;<br>}else{<br>    return null;<br>}<br>}<br>}</strong></p>
-<p>与以上例子对比可知，通过let声明变量value后，变量不会提升至函数顶部。当执行流离开if程序块后，value立即被销毁，则如果condition值为布尔值false时，就不会声明并初始化value的值，从而返回null。除此外，对于重声明情况，es5会后面变量覆盖前面变量的值，而在ES6中，在同一个作用域下严禁重声明，否则会抛出错误。<br><strong><strong>2.2 const声明</strong></strong><br>使用const声明的是常量，其值不可更改，类似于Python中tuple元素一样。每一个const声明的常量必须初始化才有意义。其和let类似，皆声明创建一个块级作用域，域外变量无法访问域内常量。同时常量也不会提升至作用域顶部,示例如下：<br><strong>if(condition){<br>  var max=6;<br>  //更多代码<br>}<br>//此处无法访问max
-</strong></p>
-<p>在这段代码中，常量max在if程序块中执行后即刻销毁，在代码块外访问不到这个常量。除此外，const严禁重声明行为发生，会导致错误抛出情况的发生。<br><strong>3.临时死区（TDZ）</strong><br>Javascript引擎在代码执行时，先扫描代码，当发现变量声明时，若遇到var声明，将会把它们提升至作用域顶部。若遇到let和const声明，会将声明放置于TDZ中。因此，在没有执行过变量语句之前访问TDZ中的变量，就会报错。只有执行具体变量声明与初始化后，变量才会从TDZ中移出，然后可以正常访问。示例代码如下：<br><strong><br>if(condition){<br>    console.log(typeof value);//引用错误<br>    let value=”blue”<br>}</strong></p>
-<p>在以上代码实例中，console.log语句会导致抛出错误。由于let定义并初始化变量value的语句不会执行，其还位于”临时死区”中，这种现象明显的展现出let，const这类声明的变量不提升的效果。<br><strong>4.循环中块级作用域绑定</strong><br>请看如下很常见的代码示例：<br>**<br>var a=[];<br>for(var i=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
-</blockquote>
-<p>a.forEach(function(func){<br>    func();<br>})**<br>&gt;<br>为了使得预期结果是输出数字0——10，故初步写出上述代码，结果发现输出了10次重复数字10，这是因为var在全局作用域下，任何局部作用域都能访问到，因此每次循环迭代都是共享着变量i，循环内部创建的函数全部保留了对于变量的引用情况。循环结束后变量i的值为10，覆盖了前面循环产出的数值，所以每次调用console.log就会输出数字10.因此若将var声明的变量i改为let进行声明，则每次循环时let声明都会创建一个新变量i，并将其初始化为当前的值，循环内部创建的每个函数都会得到属于他的值，因此会输出数字0-10.代码示例如下：</p>
-<blockquote>
-<p>**<br>var a=[];<br>for(var let=0;i&lt;=10;i++){<br>    a.push(function(){<br>        console.log(i);<br>        });<br>}</p>
-</blockquote>
-<p>a.forEach(function(func){<br>    func();//0-10<br>})<strong><br>&gt;
-</strong>5.全局块级作用域绑定**<br>当var被用于全局作用域时，它会创建一个全局变量作为全局对象（window对象）的属性。因此用var可能会覆盖一个已经存在的全局变量而如果使用const和let声明变量，则不会破坏全局作用域，不会存在此种情况，具体三种情况代码示例如下:</p>
-<blockquote>
-<p>**<br>let request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
-</blockquote>
-<p>const request=”hello”;<br>console.log(request);//hello<br>console.log(window.request==request);//false</p>
-<p>var RegExp=”hello test”;<br>console.log(RegExp);//hello test<br>console.log(window.RegExp==RegExp);//true**<br>&gt;</p>
-<p>由此可见，对于三种声明方式而言，块级作用域下声明更加安全可靠。let和const行为和var类似，但它们在循环中的行为却不一样。在循环中，let和const每一次迭代都会创建新的绑定，从而使循环体内创建的函数可以访问到相应迭代的值，而不是入var一样输出最后一次迭代的值。鉴于此，对于三种声明最佳实践方案是：默认情况下使用const，只有在确定需要改变变量值的时候使用let，循环最好使用let。全局作用域下，涉及跨window或者frame访问代码时最好使用var声明，这样可以避免一些错误，也能提升安全性。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1624,7 +1600,7 @@ console.log(message);//&quot;</code>hello` world!”<br>console.log(typeof messa
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-count">13</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>

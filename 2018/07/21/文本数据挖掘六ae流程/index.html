@@ -95,22 +95,16 @@
 
 
 
-<meta name="description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
+<meta name="description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器学习算法实践之贝叶斯算法">
-<meta property="og:url" content="https://yanhan19940405.github.io/2018/02/23/机器学习算法实践之贝叶斯算法/index.html">
+<meta property="og:title" content="文本数据挖掘流程">
+<meta property="og:url" content="https://yanhan19940405.github.io/2018/07/21/文本数据挖掘六ae流程/index.html">
 <meta property="og:site_name" content="Object">
-<meta property="og:description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-8e5546130fe55e70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/618">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-361cf7fbb64a932b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-c8a9567586a31db7.png?imageMogr2/auto-orient/">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-e8a7a6e391a479a6.png?imageMogr2/auto-orient/">
-<meta property="og:updated_time" content="2018-02-23T03:18:54.755Z">
+<meta property="og:description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
+<meta property="og:updated_time" content="2018-07-21T05:42:00.237Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习算法实践之贝叶斯算法">
-<meta name="twitter:description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460">
+<meta name="twitter:title" content="文本数据挖掘流程">
+<meta name="twitter:description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
 
 
 
@@ -140,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="https://yanhan19940405.github.io/2018/02/23/机器学习算法实践之贝叶斯算法/"/>
+  <link rel="canonical" href="https://yanhan19940405.github.io/2018/07/21/文本数据挖掘六ae流程/"/>
 
 
 
 
 
-  <title>机器学习算法实践之贝叶斯算法 | Object</title>
+  <title>文本数据挖掘流程 | Object</title>
   
 
 
@@ -263,7 +257,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/02/23/机器学习算法实践之贝叶斯算法/">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2018/07/21/文本数据挖掘六ae流程/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YH-VK17824">
@@ -280,7 +274,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">机器学习算法实践之贝叶斯算法</h1>
+          <h1 class="post-title" itemprop="name headline">文本数据挖掘流程</h1>
         
 
         <div class="post-meta">
@@ -292,8 +286,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-23T08:32:56+08:00">
-                2018-02-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-07-21T11:02:24+08:00">
+                2018-07-21
               </time>
             
 
@@ -330,16 +324,7 @@
       
 
       
-        <p>本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。<br><strong>1.朴素贝叶斯算法理论</strong><br>朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。<br>此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集合Y={c1,c2,c3….,ck},x是定义在X上的随机向量，y是定义在Y上的随机向量，p(x,y)是x和y的联合概率分布，训练数据集T={(x1,y1),(x2,y2),…,(xN,yN)}是由P(x,y)独立同分布产生的。在上述条件下，朴素贝叶斯法通过训练数据集，先学习先验概率分布p(Y=ck),k=1,2….K,之后在学习条件概率分布P(X=x|Y=ck)=P(X(1)=x(1),…,X(n)=x(n)|Y=ck),k=1,2,….,K(注意:此处(n)是指输入空间的第n个特征向量，也可以理解为上标序号)。最后学习得出两者参数值后，在运用贝叶斯定理，对给定的输入实例x=(x(1),x(2),x(3),…x(n))^T的后验概率P(Y=ck)<em>P(X(n)=x(n)|Y=ck)</em>P(X(n-1)=x(n-1)|Y=ck)…<em>P(X(1)=x(1)|Y=ck)计算比较,最终后验概率最大值所在的Y=ck值，即为该输入实例所属分类情况。<br>其中，对于后验概率最大化即为所属输入实例的分类情况，其含义即为满足了期望风险最小化准则，即以此准则推导出的函数式f(x)=arg max(P(ck|X=x))就是朴素贝叶斯法所采用的原理。此处只是略微提一下原理，请勿和判别模型f(X)决策函数搞混，贝叶斯分类方法与朴素贝叶斯都属于生成模型，由数据驱动学习概率分布得出分类结论，没有决策函数f(x).<br><strong>2.朴素贝叶斯算法实践步奏</strong><br><strong><strong>2.1 前置理论——极大似然估计</strong></strong><br>朴素贝叶斯法中，学习表示通过数据出发估计先验概率P(Y=ck)和条件概率P(X(n)=x(n)|Y=ck)，一般通过极大似然估计法估计相应概率。首先，先验概率P(Y=ck)的极大似然估计计算式如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460" alt="图1 先验概率计算式"><br>其中I为指示函数，满足条件值为1否则为0。之后，在设第j个特征向量x(j)可能取值的集合为{a[j,1],a[j,2],a[j,3],……,a[j,S]},条件概率p(X(j)=a[i,j]|Y=cK)的极大似然估计计算式即为:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-8e5546130fe55e70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/618" alt="图2 条件概率计算式"><br>其中j=1,2,…,n;l=1,2,…,s;k=1,2,….,K,式中x(i)(j)是指第i个样本的第j个特征，a[j,l]是指第j个特征可能取第l个值。<br><strong><em>*2.2 算法实践步奏</em></strong></em></p>
-<blockquote>
-<ul>
-<li>对数据进行预处理</li>
-<li>计算数据集中每个特征向量的先验概率和条件概率</li>
-<li>对于给定的实例x=(x(1),x(2),x(3),…x(n))^T,计算后验概率P(Y=ck)<em>P(X(n)=x(n)|Y=ck)</em>P(X(n-1)=x(n-1)|Y=ck)…*P(X(1)=x(1)|Y=ck)的值</li>
-<li>得到最后根据后验概率大小得到输入实例预测的分类结果。</li>
-</ul>
-</blockquote>
-<p><strong>3.朴素贝叶斯算法实践</strong><br>具体代码我已上传至Git仓库，详情请<a href="https://github.com/yanhan19940405/MachineLearning-algorithm/tree/master/Bayes%20algorithm" target="_blank" rel="external">点击查看</a>，<br>数据为模拟分类数据，所用python为3.5版本，执行结果如图所示:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-361cf7fbb64a932b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="图3 代码实践执行结果"><br><strong>4.贝叶斯估计理论</strong><br>在用朴素贝叶斯算法进行数据分类处理时，可能会遇到所要估计的概率值为0的情况。这种情况是会影响到具体的后验概率计算结果，使得分类产生偏差，鉴于此，使用贝叶斯估计方法就可以避免上述问题。其中，贝叶斯估计执行逻辑与朴素贝叶斯一样，唯一的区别在于先验概率和条件概率计算式不同。<br>其中，先验概率的贝叶斯估计为:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-c8a9567586a31db7.png?imageMogr2/auto-orient/" alt="图3 贝叶斯估计先验概率"><br>条件概率的贝叶斯估计为：<br><img src="https://upload-images.jianshu.io/upload_images/10738320-e8a7a6e391a479a6.png?imageMogr2/auto-orient/" alt="图4 贝叶斯估计条件概率"><br>在上述式子中，λ≥0，等价于在随机变量各个取值的频数上加上一个正数λ&gt;0。当λ=0时为极大似然估计。在常用的数据分类器中，取λ=1称为拉普拉斯平滑（Laplace smoothing）。最终该算法学习过程与朴素贝叶斯学习过程一样，就不在对其代码进行扩展，整个贝叶斯相关的算法基础模型也就到这里结束了。</p>
+        <p>本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。<br><strong>1.数据获取</strong><br>对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据，需要后期进一步处理。<br><strong>2.数据清洗与数据预处理</strong><br><strong><strong>2.1文本数据清洗</strong></strong><br>在获得的文本数据集，也叫语料库，里面含有许多无关的HTML标签，前端JS代码段，注释，无关特殊符号等增加训练噪声的数据，因此我们需要对数据进行处理，筛选掉这些无关数据项，技术上一般使用python正则表达式处理即可。最后，对于文本数据中的标点符号，可以剔除掉，用空格来代替。<br><strong><strong>2.2结构化数据</strong></strong><br>通过上述步骤处理后，我们就有了训练语料库。但对于文本数据挖掘而言，运用机器学习模型或者深度学习模型来训练的话还远远不够。对于监督学习，无监督学习，半监督学习而言，监督学习在文本数据瓦解运用上来看目前效果较好，也是最合理的方式。因此我们需要对文本进行打标签（label），这对于回归与分类问题而言具有重要意义。最后，我们要将不同网页的文本数据单独保存为一个文档，然后添加这个文档数据的标签，整个数据集就由多个带标签的文档构成，也叫作文档库。于是数据就有了词汇——》文档——》文档库这么一个简单结构，有利于构成训练矩阵。最后对于部分结构数据中存在的NAN数值项，在大文本训练情况下将这类数据删除即可，数据量小的可以用数值0代替。<br><strong><strong>2.3 分词</strong></strong><br>中文分词原因与处理过程请见我另一篇文本主题分类文章，这里不再详述。<br><strong>3.文本挖掘数值特征工程</strong><br>首先，文本数据集内部全是各种str类型的文本分词数据，这类结构无法直接带入到计算机中进行计算。因此我们需要将数据进一步处理成能够让计算机计算，标注的一种矩阵结构。目前做法一般分两种。<br><strong><strong>3.1词袋模型(BOW)</strong></strong><br>此类方式通过忽略分词语义特征与前后顺序，直接将所有分词放在一个统一的文档集合中，统计每一个分词出现的次数，最后得出一个矩阵。矩阵的列代表每一个分词的出现次数，矩阵的行代表文档数量，在这篇文档出现了的分词次数为m，就在那个位置标注为m即可，其他没出现的文档位置直接标注0，这类矩阵即为词频矩阵，其横向维度即为分词数目，长度会很长，因此对于低频词影响没法忽略掉，需要进一步特征筛选。最后，这类矩阵可以直接带入模型中训练。而目前大部分使用的TF-IDF算法效果较好，其引入了逆文档频率IDF，在词频概率TF基础上计算的词频矩阵能更好的契合主题分类模型。<br><strong><strong>3.2词向量模型</strong></strong><br>这种方式通过one-hot编码将分词序列化。举个例子，我有段文本“今天天气好晴朗”经过分词处理后的结构变为“今天”，“天气”，“好”，”晴朗“。那么通过one-hot编码处理后的每一个分词向量即为：<br>“今天”=[1,0,0,0],”天气”=[0,1,0,0],”好”=[0,0,1,0],”晴朗”=[0,0,0,1],最后这个句子（文档）的词向量模型即为[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]].这样不同的文档词向量矩阵组合在一起就构成了一类高维度的文档集合词向量，矩阵的列代表词表大小即为分词个数，行代表文档个数。但考虑到对于分词而言，每一个词向量列元素只有其所在位置标1，而其他位置全部标0，这会造成数据分布不均问题。所以上述简单处理方式外，还有word2vec,doc2vec,fasttext模型进一步优化处理（fasttext,word2vec模型分类过程后续详谈)。有一种基于哈夫曼树的正负训练方式值得关注，其将正负表示词语语序排布问题，在树上正负分别表示左右处理方向，对于语言相似性判断有极大作用。最后，词向量模型高度抽象，无法直接带入统计机器学习模型训练，所以最好与深度学习模型进行嵌入训练，效果最佳。<br><strong><strong>3.3特征选取</strong></strong><br>经过编码处理后的矩阵词库大小依然太大，全部带入模型训练的话，拟合起来可能速度太慢。因此需要选择数据量合适，表征能力强，区分度大，经过编码处理后的分词作为训练数据集的特征。因此具体问题就回到了传统数据挖掘数据特征选取问题，一般采用卡方检验，信息增益，随机森林算法进行特征提取即可。<br><strong>4.训练模型和调参</strong><br>这一步就需要看你选择的模型来操作了，从大体上来讲，模型需要对数据进行拟合，要达到相应精度要求，除了确保数据质量高，特征选取合适外，还需要合理的调参设置。为了增强具体模型预测的泛化性，设置合理的L1,L2正则化项也是需要考虑的。此部分就不展开说了，后续结合实例再谈。<br>最后整个文本数据挖掘流程大致如此了，后续可以在这样处理框架下细化操作即可。</p>
 
       
     </div>
@@ -364,8 +349,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/22/MachineLearning KNN algorithm/" rel="next" title="机器学习算法实践之KNN算法">
-                <i class="fa fa-chevron-left"></i> 机器学习算法实践之KNN算法
+              <a href="/2018/07/19/基于TFIDF-XGBoost文本主题分类/" rel="next" title="基于TFIDF+XGBoost文本主题分类">
+                <i class="fa fa-chevron-left"></i> 基于TFIDF+XGBoost文本主题分类
               </a>
             
           </div>
@@ -373,10 +358,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/27/机器学习算法实践之感知机模型/" rel="prev" title="机器学习算法实践之感知机模型">
-                机器学习算法实践之感知机模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
