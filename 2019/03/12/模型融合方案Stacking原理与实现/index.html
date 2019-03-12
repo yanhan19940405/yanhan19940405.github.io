@@ -95,31 +95,28 @@
 
 
 
-<meta name="description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+<meta name="description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先按照惯例，介绍几个前置概念。
 1.数据K折交叉验证(K-FOLD)
 
-如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。
-2.">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机">
 <meta property="og:type" content="article">
 <meta property="og:title" content="模型融合方案Stacking原理与实现">
 <meta property="og:url" content="https://yanhan19940405.github.io/2019/03/12/模型融合方案Stacking原理与实现/index.html">
 <meta property="og:site_name" content="Object">
-<meta property="og:description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+<meta property="og:description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先按照惯例，介绍几个前置概念。
 1.数据K折交叉验证(K-FOLD)
 
-如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。
-2.">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-42aecde107ac6f39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-156f4284c27c6078.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2019-03-12T14:53:44.880Z">
+<meta property="og:updated_time" content="2019-03-12T14:57:47.983Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="模型融合方案Stacking原理与实现">
-<meta name="twitter:description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+<meta name="twitter:description" content="机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先按照惯例，介绍几个前置概念。
 1.数据K折交叉验证(K-FOLD)
 
-如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。
-2.">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机">
 <meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
@@ -340,7 +337,7 @@
       
 
       
-        <p>机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。</p>
+        <p>机器学习是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先按照惯例，介绍几个前置概念。</p>
 <p><strong>1.数据K折交叉验证(K-FOLD)</strong></p>
 <p><img src="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 数据K折交叉"></p>
 <p>如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。</p>
