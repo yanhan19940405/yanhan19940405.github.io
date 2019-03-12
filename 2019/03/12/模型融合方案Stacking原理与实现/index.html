@@ -95,28 +95,29 @@
 
 
 
-<meta name="description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
+<meta name="description" content="机器学习一直是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+1.数据K折交叉验证(K-FOLD)
 
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JS(ES6)实践记录(三)">
-<meta property="og:url" content="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/index.html">
+<meta property="og:title" content="模型融合方案Stacking原理与实现">
+<meta property="og:url" content="https://yanhan19940405.github.io/2019/03/12/模型融合方案Stacking原理与实现/index.html">
 <meta property="og:site_name" content="Object">
-<meta property="og:description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
+<meta property="og:description" content="机器学习一直是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+1.数据K折交叉验证(K-FOLD)
 
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
-<meta property="og:updated_time" content="2017-09-22T04:25:45.380Z">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-42aecde107ac6f39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-156f4284c27c6078.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-03-12T14:46:52.262Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JS(ES6)实践记录(三)">
-<meta name="twitter:description" content="这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。1.ES6中默认参数在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：
+<meta name="twitter:title" content="模型融合方案Stacking原理与实现">
+<meta name="twitter:description" content="机器学习一直是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。
+1.数据K折交叉验证(K-FOLD)
 
-**function makerequest(url,timeout=2000,callback=functio(){}){    //函数其余部分}
-
-**&amp;gt;其">
+如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -146,13 +147,13 @@
 
 
 
-  <link rel="canonical" href="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/"/>
+  <link rel="canonical" href="https://yanhan19940405.github.io/2019/03/12/模型融合方案Stacking原理与实现/"/>
 
 
 
 
 
-  <title>JS(ES6)实践记录(三) | Object</title>
+  <title>模型融合方案Stacking原理与实现 | Object</title>
   
 
 
@@ -269,7 +270,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2017/09/20/JS-ES6-实践记录-三/">
+    <link itemprop="mainEntityOfPage" href="https://yanhan19940405.github.io/2019/03/12/模型融合方案Stacking原理与实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="YH-VK17824">
@@ -286,7 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JS(ES6)实践记录(三)</h1>
+          <h1 class="post-title" itemprop="name headline">模型融合方案Stacking原理与实现</h1>
         
 
         <div class="post-meta">
@@ -298,8 +299,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T12:09:40+08:00">
-                2017-09-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-12T21:46:03+08:00">
+                2019-03-12
               </time>
             
 
@@ -336,40 +337,22 @@
       
 
       
-        <p>这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。<br><strong>1.ES6中默认参数</strong><br>在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：</p>
-<blockquote>
-<p>**function makerequest(url,timeout=2000,callback=functio(){}){<br>    //函数其余部分<br>}</p>
-</blockquote>
-<p>**<br>&gt;<br>其中，url为必须参数，其余两个参数为默认参数.对于函数默认参数而言，个数没有限定。在ES6中，如果一个函数使用了默认参数值，则无论是否显式定义了严格模式，arguments对象行为与ES5严格模式保持一致。默认参数值存在使得arguments对象保持与命名参数分离，默认参数在函数中的变化不会导致arguments对象改变。比如:</p>
-<blockquote>
-<p>**function mixArgs(first,second=”b”){<br>    console.log(arguments.length);//1<br>    console.log(first===arguments[0]);//true<br>    console.log(second===arguments[1]);//false</p>
-</blockquote>
-<pre><code>first=&quot;c&quot;;
-secod=&quot;d&quot;;
-console.log(first===arguments[0]);//false
-console.log(second===arguments[1]);//false
-</code></pre><p>}</p>
-<p>mixArgs(“a”)<br>**<br>&gt;</p>
-<p>此例子在ES6中，只给mixArgs传入了一个参数字符串a，因此arguments元素构成的数组只有一个元素字符串a，故其长度为1，且会一直为初始值，不会受函数内部变量变化影响。<br>对于默认参数表达式而言，函数可以通过非原始传参从而得到默认参数的值，示例如下：</p>
-<blockquote>
-<p>**let value=”5”;</p>
-</blockquote>
-<p>function getvalue(){<br>    return value++;<br>}<br>function add(first,second=getvalue()){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//6<br>console.log(add(1));//7<br>**<br>&gt;<br>在此示例中，初次解析函数声明时不会调用getvalue（）方法，只有当调用add()方法并传入第二个参数时才会调用。变量value初始值为5，每次调用getvalue()方法时加1.第一次调用add(1)，只传入一个参数，没有传入第二个参数，所以执行函数getvalue，使得second默认值变为5，之后代入到函数add()中执行得到6，后面在执行add（1）与之同理。在执行add(1,1)时，直接执行逻辑“1+1”即可返回2.由此观之在没有传入具体参数赋予默认参数时，函数执行过程中任何时候都可以改变其值。<br>除了上面函数传值外，还有一种是固定参数与默认参数之间传值，比如:</p>
-<blockquote>
-<p>**function getvalue(value){<br>    return value+5;<br>}</p>
-</blockquote>
-<p>function add(first,second=getvalue(first)){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//7<br>**<br>&gt;</p>
-<p>在这个示例中，声明second=getvalue(first),所以尽管add(1,1)返回是2，但在执行默认参数为变量的函数值时，执行add(1)返回(1+6)即为7.除此外，还要注意。在引用默认参数时，只允许后面的参数引用前面参数的值，即先定义的参数不能访问后面的参数值，否则会抛出错误。<br><strong>2.ES6中不定参数</strong><br>在函数命名前加三个点（…）就表明这是一个不定参数，该参数为一个数组，包含着自它之后传入的所有参数，通过这个数组名即可逐一访问里面的参数。代码示例如下：</p>
-<blockquote>
-<p>**function pick(object,…keys){<br>    let result = object.create(null);</p>
-</blockquote>
-<pre><code>for (let i=0,len=keys.length;i&lt;len;i++){
-    result[keys[i]] = object[keys[i]];
-}
-return result;
-</code></pre><p>}</p>
-<p>**<br>&gt;</p>
-<p>在这个示例中，不定参数keys包含的是object之后传入的所有参数，除此外需要注意每个函数最多只能声明一个不定参数而且一定要包含在末尾。注意，函数的length属性统计的是函数命名参数数量，不定参数的加入不会影响length属性的值。在本示例中，只会pick()函数length值为1，因为只会计算object。<br><strong>3.展开运算符</strong></p>
+        <p>机器学习一直是基于统计学原理的一门技术。今天，我将给各位献上stacking模型融合方案原理简介与实现。首先介绍几个前置概念。</p>
+<p><strong>1.数据K折交叉验证(K-FOLD)</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-88674ef73823aa37.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 数据K折交叉"></p>
+<p>如上图所示，我们在获得一个完整数据集后，将数据分为K份（图中设置K为5），每次遍历数据取其中1份作为测试集，其余K-1份作为训练集。同时，对于任意一个基础机器学习模型而言，将会重复K次对数据进行处理的过程，这即为k-fold机制。</p>
+<p><strong>2.基模型</strong><br>Stacking中的对数据K折交叉验证处理过程中，用到的机器学习模型。</p>
+<p><strong>3.stacking原理</strong></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-42aecde107ac6f39.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图2 Stacking原理图"></p>
+<p>Stacking原理如上图所示。下面我将结合具体数据维度，来对该机制进行说明。<br>假设我得到训练集Train_data，维度为：m<em>n,同时测试集Test_data维度为a</em>（n-1）。同时假设使用Train_data中所有特征进行训练，则从中取出一列label列表，其长度为m，此时Train_data维度变为(m*(n-1))。之后，设置K个机器学习模型作为基模型（本案例中所设置数字为5）。之后，我们分别取这K个模型中，每一个模型进行训练集上K折交叉处理。在一次迭代中，将数据的第K份作为测试集，其他K-1份作为训练集，从而一次迭代生成维度为(m/k,(n-1)/k)的矩阵。将每一次生成的矩阵拼接起来，则对于一个模型而言，完整K次遍历数据后，将生成维度为（m,n-1)的矩阵。则K个模型而言，我们将这些矩阵横向拼接起来，得到最终超特征矩阵new_train，维度为(m,kn-k)。</p>
+<p>除此外，对于测试集Test_data而言，我们也在基模型每次遍历测试集并训练出模型时，对测试集进行预测。每个模型每次遍历得到的测试数据集矩阵维度为(a,n-1),则<br>k次遍历后，最终的到的矩阵维度为(a,kn-k).此时为了保证维度统一，我们对该矩阵进行按行求取均值，将其维度变为(a,n-1)。对于K个模型而言，最终经过上述处理过程后，得到新的测试集上的超特征矩阵new_test，其维度为(a,kn-k)。</p>
+<p>上述过程即为stacking第一层处理过程。之后第二层处理过程中，我们将new_train作为训练集，将第一层得到的label集合作为标签进行训练，得到最终训练出的模型，从而对new_test进行预测即可。</p>
+<p><strong>4.stacking扩展</strong></p>
+<p>在kaggle的比赛上，有的团队在经过第一层处理后得到的new_train矩阵基础上，与原始的train_data矩阵进行横向拼接。同时，对new_test也做此处理。从而选取K个机器学习模型，继续对新数据进行K-fold处理。后续操作与上述同理。但一般经过三层即可结束了。</p>
+<p><strong>5.stacking代码实践</strong></p>
+<p>代码已经上传至git仓库，请<a href="https://github.com/yanhan19940405/Data_machine_learning/blob/master/stacking_class.py" target="_blank" rel="external">点击查看</a></p>
+<p>我用此机制跑了跑某比赛，在没有调参的情况下，与第一名指标相差不是很大，还是较为满意的。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-156f4284c27c6078.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图3 跑分图"></p>
 
       
     </div>
@@ -394,8 +377,8 @@ return result;
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/09/14/JS-ES6-实践记录-二/" rel="next" title="JS(ES6)实践记录(二)">
-                <i class="fa fa-chevron-left"></i> JS(ES6)实践记录(二)
+              <a href="/2018/07/21/文本数据挖掘六ae流程/" rel="next" title="文本数据挖掘流程">
+                <i class="fa fa-chevron-left"></i> 文本数据挖掘流程
               </a>
             
           </div>
@@ -403,10 +386,6 @@ return result;
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/01/18/Resources/" rel="prev" title="WY's FE Resources">
-                WY's FE Resources <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
