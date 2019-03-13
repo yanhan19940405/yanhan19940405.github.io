@@ -1,11 +1,101 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
+
+
+
   
-  <title>文本数据挖掘流程 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
+
+
+<html class="theme-next pisces use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="文本数据挖掘流程">
 <meta property="og:url" content="http://yoursite.com/2018/07/21/文本数据挖掘流程/index.html">
@@ -15,232 +105,546 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="文本数据挖掘流程">
 <meta name="twitter:description" content="本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。1.数据获取对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/07/21/文本数据挖掘流程/"/>
+
+
+
+
+
+  <title>文本数据挖掘流程 | Hexo</title>
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <!--<link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">-->
-  
-  <link rel="stylesheet" href="/css/style.css">
-  
+
+
+
+
+
+
+
 
 </head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-文本数据挖掘流程" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/07/21/文本数据挖掘流程/" class="article-date">
-  <time datetime="2018-07-21T03:02:24.000Z" itemprop="datePublished">2018-07-21</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+<body itemscope itemtype="http://schema.org/WebPage" lang="">
+
   
-    <h1 class="article-title" itemprop="name">
-      文本数据挖掘流程
-    </h1>
+  
+    
   
 
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Hexo</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Startseite
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            Über
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archiv
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/21/文本数据挖掘流程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文本数据挖掘流程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Veröffentlicht am</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-07-21T11:02:24+08:00">
+                2018-07-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <p>本文主要记录文本数据挖掘大致流程，用以梳理该部分结构知识。<br><strong>1.数据获取</strong><br>对于文本数据而言，在公司项目中大部分数据可以通过购买方式获取数据。但常见的方式即为通过网络爬虫获取，详细请参考我后续爬虫技术教程。该种方式获取数据原理是通过程序自动遍历固定网址，将整个页面HTML结构中，不同页面DOM节点文本信息收集整理，然后缓存到本地数据库中。数据集具有结构不唯一，含有HTML标签，特殊符号等不利于训练的数据，需要后期进一步处理。<br><strong>2.数据清洗与数据预处理</strong><br><strong><strong>2.1文本数据清洗</strong></strong><br>在获得的文本数据集，也叫语料库，里面含有许多无关的HTML标签，前端JS代码段，注释，无关特殊符号等增加训练噪声的数据，因此我们需要对数据进行处理，筛选掉这些无关数据项，技术上一般使用python正则表达式处理即可。最后，对于文本数据中的标点符号，可以剔除掉，用空格来代替。<br><strong><strong>2.2结构化数据</strong></strong><br>通过上述步骤处理后，我们就有了训练语料库。但对于文本数据挖掘而言，运用机器学习模型或者深度学习模型来训练的话还远远不够。对于监督学习，无监督学习，半监督学习而言，监督学习在文本数据瓦解运用上来看目前效果较好，也是最合理的方式。因此我们需要对文本进行打标签（label），这对于回归与分类问题而言具有重要意义。最后，我们要将不同网页的文本数据单独保存为一个文档，然后添加这个文档数据的标签，整个数据集就由多个带标签的文档构成，也叫作文档库。于是数据就有了词汇——》文档——》文档库这么一个简单结构，有利于构成训练矩阵。最后对于部分结构数据中存在的NAN数值项，在大文本训练情况下将这类数据删除即可，数据量小的可以用数值0代替。<br><strong><strong>2.3 分词</strong></strong><br>中文分词原因与处理过程请见我另一篇文本主题分类文章，这里不再详述。<br><strong>3.文本挖掘数值特征工程</strong><br>首先，文本数据集内部全是各种str类型的文本分词数据，这类结构无法直接带入到计算机中进行计算。因此我们需要将数据进一步处理成能够让计算机计算，标注的一种矩阵结构。目前做法一般分两种。<br><strong><strong>3.1词袋模型(BOW)</strong></strong><br>此类方式通过忽略分词语义特征与前后顺序，直接将所有分词放在一个统一的文档集合中，统计每一个分词出现的次数，最后得出一个矩阵。矩阵的列代表每一个分词的出现次数，矩阵的行代表文档数量，在这篇文档出现了的分词次数为m，就在那个位置标注为m即可，其他没出现的文档位置直接标注0，这类矩阵即为词频矩阵，其横向维度即为分词数目，长度会很长，因此对于低频词影响没法忽略掉，需要进一步特征筛选。最后，这类矩阵可以直接带入模型中训练。而目前大部分使用的TF-IDF算法效果较好，其引入了逆文档频率IDF，在词频概率TF基础上计算的词频矩阵能更好的契合主题分类模型。<br><strong><strong>3.2词向量模型</strong></strong><br>这种方式通过one-hot编码将分词序列化。举个例子，我有段文本“今天天气好晴朗”经过分词处理后的结构变为“今天”，“天气”，“好”，”晴朗“。那么通过one-hot编码处理后的每一个分词向量即为：<br>“今天”=[1,0,0,0],”天气”=[0,1,0,0],”好”=[0,0,1,0],”晴朗”=[0,0,0,1],最后这个句子（文档）的词向量模型即为[[1,0,0,0],[0,1,0,0],[0,0,1,0],[0,0,0,1]].这样不同的文档词向量矩阵组合在一起就构成了一类高维度的文档集合词向量，矩阵的列代表词表大小即为分词个数，行代表文档个数。但考虑到对于分词而言，每一个词向量列元素只有其所在位置标1，而其他位置全部标0，这会造成数据分布不均问题。所以上述简单处理方式外，还有word2vec,doc2vec,fasttext模型进一步优化处理（fasttext,word2vec模型分类过程后续详谈)。有一种基于哈夫曼树的正负训练方式值得关注，其将正负表示词语语序排布问题，在树上正负分别表示左右处理方向，对于语言相似性判断有极大作用。最后，词向量模型高度抽象，无法直接带入统计机器学习模型训练，所以最好与深度学习模型进行嵌入训练，效果最佳。<br><strong><strong>3.3特征选取</strong></strong><br>经过编码处理后的矩阵词库大小依然太大，全部带入模型训练的话，拟合起来可能速度太慢。因此需要选择数据量合适，表征能力强，区分度大，经过编码处理后的分词作为训练数据集的特征。因此具体问题就回到了传统数据挖掘数据特征选取问题，一般采用卡方检验，信息增益，随机森林算法进行特征提取即可。<br><strong>4.训练模型和调参</strong><br>这一步就需要看你选择的模型来操作了，从大体上来讲，模型需要对数据进行拟合，要达到相应精度要求，除了确保数据质量高，特征选取合适外，还需要合理的调参设置。为了增强具体模型预测的泛化性，设置合理的L1,L2正则化项也是需要考虑的。此部分就不展开说了，后续结合实例再谈。<br>最后整个文本数据挖掘流程大致如此了，后续可以在这样处理框架下细化操作即可。</p>
 
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/07/21/文本数据挖掘流程/" data-id="cjt5zbvvj0009k4w3ohg8fe2h" class="article-share-link">Share</a>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/07/19/基于TFIDF-XGBoost文本主题分类/" rel="next" title="基于TFIDF+XGBoost文本主题分类">
+                <i class="fa fa-chevron-left"></i> 基于TFIDF+XGBoost文本主题分类
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/12/模型融合方案Stacking原理与实现/" rel="prev" title="模型融合方案Stacking原理与实现">
+                模型融合方案Stacking原理与实现 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
       
       
     </footer>
   </div>
   
-    
-<nav id="article-nav">
   
-    <a href="/2019/03/12/模型融合方案Stacking原理与实现/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+  <div id="lv-container" data-id="city" data-uid=""></div>
+      
+
+
+        </div>
         
-          模型融合方案Stacking原理与实现
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="John Doe" />
+          <p class="site-author-name" itemprop="name">John Doe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-name">Artikel</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
   
-  
-    <a href="/2018/07/19/基于TFIDF-XGBoost文本主题分类/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">基于TFIDF+XGBoost文本主题分类</div>
-    </a>
-  
-</nav>
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
 
   
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/07/">July 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/03/">March 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li></ul>
-    </div>
-  </div>
+</div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2019/03/12/模型融合方案Stacking原理与实现/">模型融合方案Stacking原理与实现</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/21/文本数据挖掘流程/">文本数据挖掘流程</a>
-          </li>
-        
-          <li>
-            <a href="/2018/07/19/基于TFIDF-XGBoost文本主题分类/">基于TFIDF+XGBoost文本主题分类</a>
-          </li>
-        
-          <li>
-            <a href="/2018/03/08/机器学习算法实践之决策树/">机器学习算法实践之决策树</a>
-          </li>
-        
-          <li>
-            <a href="/2018/02/28/区块链技术体系初步/">区块链技术体系初步</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
+  <div class="powered-by">Erstellt mit  <a class="theme-link" href="https://hexo.io">Hexo</a></div>
 
-  
-</aside>
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-  {% if theme.gitment.enable %}
-   {% set owner = theme.gitment.githubID %}
-   {% set repo = theme.gitment.repo %}
-   {% set cid = theme.gitment.ClientID %}
-   {% set cs = theme.gitment.ClientSecret %}
-   <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
-   <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
-   {% if not theme.gitment.lazy %}
-       <script type="text/javascript">
-           var gitment = new Gitment({
-               id: document.location.href, 
-               owner: '{{yanhan19940405}}',
-               repo: '{{yanhan19940405.github.io}}',
-               oauth: {
-                   client_id: '{{1d0069a19c07bab5013a}}',
-                   client_secret: '{{811a87153c5dab721953c7d034810882eb5fe036}}',
-               }});
-           gitment.render('gitment-container');
-       </script>
-   {% else %}
-       <script type="text/javascript">
-           function ShowGitment(){
-               document.getElementById("gitment-display-button").style.display = "none";
-               document.getElementById("gitment-container").style.display = "block";
-               var gitment = new Gitment({
-                    id: document.location.href, 
-               owner: '{{yanhan19940405}}',
-               repo: '{{yanhan19940405.github.io}}',
-               oauth: {
-                   client_id: '{{1d0069a19c07bab5013a}}',
-                   client_secret: '{{811a87153c5dab721953c7d034810882eb5fe036}}',
-                   }});
-               gitment.render('gitment-container');
-           }
-       </script>
-   {% endif %}
-{% endif %}
+    </footer>
 
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
     
 
-<script src="/js/jquery.min.js"></script>
-
-
-  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-  <script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-<script src="/js/script.js"></script>
-
   </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
