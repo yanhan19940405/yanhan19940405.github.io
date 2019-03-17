@@ -257,6 +257,161 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/18/自然语言处理Attention机制综述与基于keras复现/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/18/自然语言处理Attention机制综述与基于keras复现/" itemprop="url">自然语言处理Attention机制综述与基于keras复现</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-18T01:47:16+08:00">
+                2019-03-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在自然语言领域中，Attention机制借鉴于人脑得注意力机制流程，从而选择输入文本序列中关键信息进行处理，从而减少语言模型中带有序列信息得重点词与平常词没有区分得前提下，所带来的训练误差。</p>
+<p><strong>1.Attention机制的种类</strong></p>
+<p>从宏观上来讲，目前Attention机制主要分为聚焦式（focus）注意力机制和显著性(saliency-based)注意力机制。其中聚焦式注意力机制概念为依托于输入到神经网络的数据，按照从前往后的顺序，将数值较大的重要权重主动的、依赖预定任务的聚焦于某一对象上，从而将该对象与其他对象进行区分。而显著性注意力机制主要是神经网络中，从往前的一种反馈机制导致的被动注意力机制。这种注意力机制不受主动干预影响，只是一种神经网络为了更好的拟合数据，从而出现的被动反馈的调节机制而已。在LSTM与GRU中的门控机制可以近似看作这种注意力机制。最后，在自然语言处理过程中的注意力机制都属于focus一类。</p>
+<p><strong>2.Attention机制运行过程</strong></p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/attention.png" alt="图1 attention机制原理"></p>
+<p>Attention机制运行过程如上图所示。其大致步骤如下：</p>
+<p>1.输入文本序列，并将文本序列表征为类似于<key,value>这样的键值对<br>。<br>2.输入query句向量，用keyi与query句向量计算文本相似度。</key,value></p>
+<p>3.进行softmax运算得出注意力权值ai=softmax(F(keyiquery))。此处ai可以理解为文本序列query中，第i（列）个信息受到的关注程度。</p>
+<p>4.将value序列输入到网络，与ai 进行加权平均计算，从而得到序列编码值Attention。其中，在第三步文本相似度计算时，主要有如下几种方式:</p>
+<p>1.加性注意力机制，计算如图所示，W和Wq分别为训练的超参数：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/1.jpg" alt="图1 公式"></p>
+<p>2.点积注意力机制，相似度计算如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/2.jpg" alt="图2 公式"></p>
+<p>3.缩放点积注意力机制·，其中d为词向量宽度，为了减少内存消耗，此处除以d进行缩放，减小计算量。相似度计算如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/3.jpg" alt="图3 公式"></p>
+<p>4.余弦相似度注意力机制，相似度计算如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/4.jpg" alt="图4 公式"></p>
+<p>最后，上述注意力机制总体称为软性注意力机制(soft attention).其将文本序列x看作由<key，value>键值对构成。在此基础上，其通过与Query进行相似度计算从而对文本序列x进行软寻址。这也是被称为此机制的原因。</key，value></p>
+<p><strong>3.Attention机制细节</strong><br><strong><strong>3.1外部注意力机制</strong></strong></p>
+<p>当key=value=x，query=y时，attention机制计算流程与上述一致。此时注意力机制称为外部注意力机制。此时，softmax计算方式也进行了更改，计算公式如下，其他attention流程与上述图一致：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/5.jpg" alt="图5 公式"></p>
+<p><strong><strong>3.2.自注意力机制(self-attention)</strong></strong></p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/6.jpg" alt="图6 点乘缩放注意力机制"></p>
+<p>自注意力机制是点乘缩放注意力机制变种，其结构如上图所示.当key=value=query=x时,分别对Q,K,V矩阵进行线性变换操作，如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/7.jpg" alt="图7 公式"><br><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/8.jpg" alt="图8 公式"><br><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/9.jpg" alt="图9 公式"></p>
+<p>其中，WQ,WK,WV为待训练的参数。其他后续流程与上述点乘缩放注意力机制一样，此处不再说明。</p>
+<p><strong><strong>3.3.多头（muti-head）注意力机制</strong></strong></p>
+<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/10.jpg" alt="图10 多头注意力机制"></p>
+<p>如上图所示，当进行了h次self attention之后，对每一次经过self attention得到的att值进行加性连接，运算公式如下所示，其中WO为待训练参数：</p>
+<p>MultiHead(Q,K,V ) = Concat(head1,…,headh).WO</p>
+<p><strong><strong>3.4硬注意力机制(Hard attention)</strong></strong></p>
+<p>此类注意力机制与软性注意力机制的区别在于如下几方面：软性注意力机制输入的是定长的文本序列，同时其通过对文本序列中所有信息进行权值处理，从而进行编码。而硬性注意力机制只选择定长文本中，选择分布概率（语言模型）最大的信息作为输入，同时其用欠采样或者随机采样的方式进行信息筛选。最终得到长度不一致的序列进行训练。此处将会有更大问题，无法使用神经网络模型训练，因此一般都使用软性注意力机制进行训练。</p>
+<p><strong>4.基于keras的self-attention机制复现</strong></p>
+<p>我在此复现了下self-attention，其源码请<a href="https://github.com/yanhan19940405/Self_Attention" target="_blank" rel="external">点击</a>到git仓库查阅。</p>
+<p>其输入：上一层的输出张量。</p>
+<p>输出：一个三维张量，维度为（samples，maxlen，attention）,第一个维度含义代表句子数目，maxlen维度代表每一个句子长度，attention维度代表每个句子中每个分词构成的attention编码值个数。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/12/模型融合方案Stacking原理与实现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1359,159 +1514,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/20/JS-ES6-实践记录-三/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="VKYH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="VKYH-2017-8-17">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/20/JS-ES6-实践记录-三/" itemprop="url">JS(ES6)实践记录(三)</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T12:09:40+08:00">
-                2017-09-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>这篇文章将记录JavaScript ES6下函数相关内容，在ES6中，函数特性大幅度更新，使得JS编程更加灵活。<br><strong>1.ES6中默认参数</strong><br>在ES6中，JS简化了为形参提供默认值的过程，如果没有参数传入值则为其提供一个初始值。示例如下：</p>
-<blockquote>
-<p>**function makerequest(url,timeout=2000,callback=functio(){}){<br>    //函数其余部分<br>}</p>
-</blockquote>
-<p>**<br>&gt;<br>其中，url为必须参数，其余两个参数为默认参数.对于函数默认参数而言，个数没有限定。在ES6中，如果一个函数使用了默认参数值，则无论是否显式定义了严格模式，arguments对象行为与ES5严格模式保持一致。默认参数值存在使得arguments对象保持与命名参数分离，默认参数在函数中的变化不会导致arguments对象改变。比如:</p>
-<blockquote>
-<p>**function mixArgs(first,second=”b”){<br>    console.log(arguments.length);//1<br>    console.log(first===arguments[0]);//true<br>    console.log(second===arguments[1]);//false</p>
-</blockquote>
-<pre><code>first=&quot;c&quot;;
-secod=&quot;d&quot;;
-console.log(first===arguments[0]);//false
-console.log(second===arguments[1]);//false
-</code></pre><p>}</p>
-<p>mixArgs(“a”)<br>**<br>&gt;</p>
-<p>此例子在ES6中，只给mixArgs传入了一个参数字符串a，因此arguments元素构成的数组只有一个元素字符串a，故其长度为1，且会一直为初始值，不会受函数内部变量变化影响。<br>对于默认参数表达式而言，函数可以通过非原始传参从而得到默认参数的值，示例如下：</p>
-<blockquote>
-<p>**let value=”5”;</p>
-</blockquote>
-<p>function getvalue(){<br>    return value++;<br>}<br>function add(first,second=getvalue()){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//6<br>console.log(add(1));//7<br>**<br>&gt;<br>在此示例中，初次解析函数声明时不会调用getvalue（）方法，只有当调用add()方法并传入第二个参数时才会调用。变量value初始值为5，每次调用getvalue()方法时加1.第一次调用add(1)，只传入一个参数，没有传入第二个参数，所以执行函数getvalue，使得second默认值变为5，之后代入到函数add()中执行得到6，后面在执行add（1）与之同理。在执行add(1,1)时，直接执行逻辑“1+1”即可返回2.由此观之在没有传入具体参数赋予默认参数时，函数执行过程中任何时候都可以改变其值。<br>除了上面函数传值外，还有一种是固定参数与默认参数之间传值，比如:</p>
-<blockquote>
-<p>**function getvalue(value){<br>    return value+5;<br>}</p>
-</blockquote>
-<p>function add(first,second=getvalue(first)){<br>    return first+second;<br>}<br>console.log(add(1,1));//2<br>console.log(add(1));//7<br>**<br>&gt;</p>
-<p>在这个示例中，声明second=getvalue(first),所以尽管add(1,1)返回是2，但在执行默认参数为变量的函数值时，执行add(1)返回(1+6)即为7.除此外，还要注意。在引用默认参数时，只允许后面的参数引用前面参数的值，即先定义的参数不能访问后面的参数值，否则会抛出错误。<br><strong>2.ES6中不定参数</strong><br>在函数命名前加三个点（…）就表明这是一个不定参数，该参数为一个数组，包含着自它之后传入的所有参数，通过这个数组名即可逐一访问里面的参数。代码示例如下：</p>
-<blockquote>
-<p>**function pick(object,…keys){<br>    let result = object.create(null);</p>
-</blockquote>
-<pre><code>for (let i=0,len=keys.length;i&lt;len;i++){
-    result[keys[i]] = object[keys[i]];
-}
-return result;
-</code></pre><p>}</p>
-<p>**<br>&gt;</p>
-<p>在这个示例中，不定参数keys包含的是object之后传入的所有参数，除此外需要注意每个函数最多只能声明一个不定参数而且一定要包含在末尾。注意，函数的length属性统计的是函数命名参数数量，不定参数的加入不会影响length属性的值。在本示例中，只会pick()函数length值为1，因为只会计算object。<br><strong>3.展开运算符</strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1565,7 +1567,7 @@ return result;
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">14</span>
+                <span class="site-state-item-count">15</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
