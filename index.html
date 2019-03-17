@@ -332,30 +332,30 @@
 <p><strong>1.Attention机制的种类</strong></p>
 <p>从宏观上来讲，目前Attention机制主要分为聚焦式（focus）注意力机制和显著性(saliency-based)注意力机制。其中聚焦式注意力机制概念为依托于输入到神经网络的数据，按照从前往后的顺序，将数值较大的重要权重主动的、依赖预定任务的聚焦于某一对象上，从而将该对象与其他对象进行区分。而显著性注意力机制主要是神经网络中，从往前的一种反馈机制导致的被动注意力机制。这种注意力机制不受主动干预影响，只是一种神经网络为了更好的拟合数据，从而出现的被动反馈的调节机制而已。在LSTM与GRU中的门控机制可以近似看作这种注意力机制。最后，在自然语言处理过程中的注意力机制都属于focus一类。</p>
 <p><strong>2.Attention机制运行过程</strong></p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/attention.png" alt="图1 attention机制原理"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-e0e8e5564e13fb72.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 attention机制原理"></p>
 <p>Attention机制运行过程如上图所示。其大致步骤如下：</p>
-<p>1.输入文本序列，并将文本序列表征为类似于<key,value>这样的键值对<br>。<br>2.输入query句向量，用keyi与query句向量计算文本相似度。</key,value></p>
+<p>1.输入文本序列，并将文本序列表征为类似于key-value这样的键值对<br>。<br>2.输入query句向量，用keyi与query句向量计算文本相似度。</p>
 <p>3.进行softmax运算得出注意力权值ai=softmax(F(keyiquery))。此处ai可以理解为文本序列query中，第i（列）个信息受到的关注程度。</p>
 <p>4.将value序列输入到网络，与ai 进行加权平均计算，从而得到序列编码值Attention。其中，在第三步文本相似度计算时，主要有如下几种方式:</p>
 <p>1.加性注意力机制，计算如图所示，W和Wq分别为训练的超参数：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/1.jpg" alt="图1 公式"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-e4bbc565d941d2dc.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 公式"></p>
 <p>2.点积注意力机制，相似度计算如下图所示：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/2.jpg" alt="图2 公式"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-8ffec7d806b312ae.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图2 公式"></p>
 <p>3.缩放点积注意力机制·，其中d为词向量宽度，为了减少内存消耗，此处除以d进行缩放，减小计算量。相似度计算如下图所示：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/3.jpg" alt="图3 公式"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-c2eab6ed84bded8b.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图3 公式"></p>
 <p>4.余弦相似度注意力机制，相似度计算如下图所示：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/4.jpg" alt="图4 公式"></p>
-<p>最后，上述注意力机制总体称为软性注意力机制(soft attention).其将文本序列x看作由<key，value>键值对构成。在此基础上，其通过与Query进行相似度计算从而对文本序列x进行软寻址。这也是被称为此机制的原因。</key，value></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-6b45abd2fcb2e979.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图4 公式"></p>
+<p>最后，上述注意力机制总体称为软性注意力机制(soft attention).其将文本序列x看作由key-value键值对构成。在此基础上，其通过与Query进行相似度计算从而对文本序列x进行软寻址。这也是被称为此机制的原因。</p>
 <p><strong>3.Attention机制细节</strong><br><strong><strong>3.1外部注意力机制</strong></strong></p>
 <p>当key=value=x，query=y时，attention机制计算流程与上述一致。此时注意力机制称为外部注意力机制。此时，softmax计算方式也进行了更改，计算公式如下，其他attention流程与上述图一致：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/5.jpg" alt="图5 公式"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-cf131c7592e11594.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图5 公式"></p>
 <p><strong><strong>3.2.自注意力机制(self-attention)</strong></strong></p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/6.jpg" alt="图6 点乘缩放注意力机制"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-eed66941cf87b322.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图6 点乘缩放注意力机制"></p>
 <p>自注意力机制是点乘缩放注意力机制变种，其结构如上图所示.当key=value=query=x时,分别对Q,K,V矩阵进行线性变换操作，如下图所示：</p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/7.jpg" alt="图7 公式"><br><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/8.jpg" alt="图8 公式"><br><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/9.jpg" alt="图9 公式"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-08e965382c1aa442.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图7 公式"><br><img src="https://upload-images.jianshu.io/upload_images/10738320-dffb58851d62ec8c.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图8 公式"><br><img src="https://upload-images.jianshu.io/upload_images/10738320-d1b58fcae80b0a96.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图9 公式"></p>
 <p>其中，WQ,WK,WV为待训练的参数。其他后续流程与上述点乘缩放注意力机制一样，此处不再说明。</p>
 <p><strong><strong>3.3.多头（muti-head）注意力机制</strong></strong></p>
-<p><img src="https://github.com/yanhan19940405/Self_Attention/blob/master/image/10.jpg" alt="图10 多头注意力机制"></p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-8b15dc048c74d8a7.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图10 多头注意力机制"></p>
 <p>如上图所示，当进行了h次self attention之后，对每一次经过self attention得到的att值进行加性连接，运算公式如下所示，其中WO为待训练参数：</p>
 <p>MultiHead(Q,K,V ) = Concat(head1,…,headh).WO</p>
 <p><strong><strong>3.4硬注意力机制(Hard attention)</strong></strong></p>
