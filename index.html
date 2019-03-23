@@ -257,6 +257,138 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/24/自然语言处理语序问题及解决思路（部分附源码实现）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/03/24/自然语言处理语序问题及解决思路（部分附源码实现）/" itemprop="url">自然语言处理语序问题及解决思路（部分附源码实现）</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-24T03:00:49+08:00">
+                2019-03-24
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在自然语言领域，语序问题对于文本特征表述，生成序列等场景都有很强的影响份量。本文将专门针对此场景进行理论汇总。同时将给出解决方案。</p>
+<p><strong>一．语序对于文本特征提取的影响与优化</strong><br>在自然语言领域，对于文本特征提取方式，从当初基于词频构建的矩阵，由于缺乏对于同义词辨析与文本上下文信息的解读，使得模型训练依然存在较大误差。到后来基于词相似度所构成的Word2vec词向量方案及后续变种出现后，解决了部分文本上下文信息问题，但依然存在词义辨析问题。鉴于此，为了更好的从文本中提取信息，这里就引出了下面要描述的一种词位置矩阵——Position Embedding方案。</p>
+<p>将Position Embeding机制发扬光大的，正是谷歌《All you need is attention》这篇论文。其原理在于通过word embedding嵌入层进行词组look up操作后，将所生产的张量E进行进一步特征提取。张量E的宽度为d维，则在张量E的第I维则通过以下式子进行转换计算。同时，式中pos表示张量E的每一个列元素。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-8dafcec5776c4d9c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 POSemb图"></p>
+<p>Position Embeding一般放置于词嵌入层后使用，在Transformer模型中，position embedding替代了传统RNN与cnn，直接通过记录词位置，作为文本上下文信息表征结构。而2018年谷歌Bert模型利用此机制对文本特征提取这一块进行改善，其将word embedding，句子层面嵌入向量和POS EMB三者相加进行结合训练。由此可见，POS EMB机制的有效性。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/10738320-1e08ced306766285.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图2 BERT图"></p>
+<p>我在此基于keras复现此机制，详情<a href="https://github.com/yanhan19940405/Self_Attention/blob/master/pos_emb.py" target="_blank" rel="external">请点击</a>查看。</p>
+<p><strong>二．语序对于序列生成的影响与优化</strong></p>
+<p>首先先提一下语言模型的概念吧。设一段文本序列长为n，其表征为x={x1,x2,x3,x4,……,xn}.则最终生成的该序列x概率可用条件概率表示: P=P(x1)P(x2|x1)P(x3|x2x1)P(x4|x3x2x1)……P(Xn|x1,x2,x3,x4,…,xn-1).因此在序列生成情况过程中，其条件概率分布及蕴含了文本上下文信息，从而可以看出语序对于文本而言重要性不言而喻。</p>
+<p>在文本序列生成场景中，最常见的莫过于文本摘要，机器翻译，生成式对话，自动对联等应用场景。其原理基于seq2seq结构模型进行训练，通过Encoder将原始文本序列进行特征提取，转换为数字编码，生成隐藏状态向量state。之后与decoder端T0时刻目标文本序列构成的张量进行合并，从而输出T0+1时刻的目标文本序列。而在预测阶段的文本序列生成时，由于生成的文本是根据概率来分布，组合情况有多种，因此确认最优效的序列并进行输出便有了重要意义。在此阶段，我们可以使用集束搜索进行优化(Beem Search)。</p>
+<p>BeemSearch原理大致如下：1.我们假设在Decoder端要生成序列A,B,C,D.若我们设置Beem search的词表大小为2，则预测阶段先生成词A作为序列开头位置。2.当后续要输入第二个词时，此时将会计算P(AB),P(AC),P(AD),P(AA)四种序列语言模型的概率大小。3.从中选出最大的概率P(AB)=P(A)P(B|A)。从而选择AB序列输出。4.后续又从词B开始，按照上述流程依次输出，直到输出整个序列ABCD为止。</p>
+<p>BeemSearch实现很简单了，在decoder输出概率后，对其进行相应生成序列概率计算，即可完成整个序列生成步骤，此处不再举代码例子。</p>
+<p>就到此为止吧！</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/18/自然语言处理Attention机制综述与基于keras复现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1394,126 +1526,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/18/Resources/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="VKYH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="VKYH-2017-8-17">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/18/Resources/" itemprop="url">WY's FE Resources</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-18T20:47:42+08:00">
-                2018-01-18
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>基于Node.js的开发技术</strong><br>1.<a href="https://github.com" target="_blank" rel="external">Github</a>;<br>2.<a href="https://cn.vuejs.org/" target="_blank" rel="external">VUE.JS</a>;<br>3.<a href="https://www.vue-js.com/" target="_blank" rel="external">vue.js论坛</a>;<br>4.<a href="https://www.iviewui.com/" target="_blank" rel="external">iview2.0 UI库</a>，这是vue,js专有UI库;<br>5.<a href="https://segmentfault.com/" target="_blank" rel="external">segmentfault</a>,IT技术讨论社区;<br>6.<a href="http://huziketang.com/books/react/" target="_blank" rel="external">react小书</a>,react技术入门必备;<br>7.<a href="https://www.jianshu.com/p/42e11515c10f" target="_blank" rel="external">Webpack很好地总结资料</a>，搭建脚手架基础的资料;<br>8.<a href="https://doc.webpack-china.org/" target="_blank" rel="external">Webpack中文文档</a>，很好地文档资料;<br>9.<a href="https://segmentfault.com/a/1190000007019545" target="_blank" rel="external">Fetch交互方式</a>，基于promise前后端异步交互方法;<br>10.<a href="https://www.kancloud.cn/yunye/axios/234845" target="_blank" rel="external">Axios中文文档</a>，前后端交互方式文档，与fetch不一样;<br>11.<a href="https://ant.design/docs/react/introduce-cn" target="_blank" rel="external">Ant Design</a>，这是react技术广泛使用的UI库;<br>12.<a href="https://motion.ant.design/" target="_blank" rel="external">Ant Motion</a>，这是基于react的动画解决方案;<br>13.<a href="http://www.expressjs.com.cn/" target="_blank" rel="external">Express</a>，基于node.js的前端调试服务器，可以解决跨域访问问题与其他模拟后端请求问题;<br>14.<a href="https://www.v2ex.com/" target="_blank" rel="external">V2EX</a>，这是技术解决方案的讨论平台;<br>15.<a href="https://stackoverflow.com/" target="_blank" rel="external">Stack Overflow</a>，在线技术交流平台;<br>16.<a href="http://jsbin.com/" target="_blank" rel="external">jsbin</a>，在线JS代码编写调试工具;<br>17.<a href="http://www.runoob.com/mongodb/mongodb-tutorial.html" target="_blank" rel="external">Mongodb</a>，数据库教程;<br>18.<a href="http://echarts.baidu.com/" target="_blank" rel="external">Echart</a>，百度推出的数据可视化库;<br>19.<a href="http://www.ourd3js.com/wordpress/396/" target="_blank" rel="external">D3.js</a>另一种功能强大的数据可视化库;<br><strong>基于原生体系的开发技术</strong><br>1.<a href="http://fis.baidu.com/" target="_blank" rel="external">FIS</a>，百度推出的前端调试服务器;<br>2.<a href="http://www.jq22.com" target="_blank" rel="external">JQ与bootstrap常用效果库</a>;<br>3.<a href="http://layoutit.justjavac.com/" target="_blank" rel="external">Bootstrap可视化布局</a>,在线进行页面布局，生成相应bootstrap代码。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1567,7 +1579,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-count">16</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
