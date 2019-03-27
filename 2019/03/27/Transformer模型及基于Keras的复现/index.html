@@ -95,22 +95,18 @@
 
 
 
-<meta name="description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
+<meta name="description" content="1.动态词向量技术先说以下动态词向量吧。这个东西其实本质上来讲还是需要由word embedding基础上进一步处理。其借助于seq2seq模型，经过encoder端将文本序列动态编码成数值矩阵，其本质上已经脱离了传统词向量模型基于词相似度生成的特征矩阵。对于动态这种词的理解，可以按照Transformer来理解。在encoder端中，通过几层self-attention并行处理，其依据序列语言模">
 <meta property="og:type" content="article">
-<meta property="og:title" content="机器学习算法实践之贝叶斯算法">
-<meta property="og:url" content="http://yoursite.com/2018/02/23/机器学习算法实践之贝叶斯算法/index.html">
+<meta property="og:title" content="Transformer模型及基于Keras的复现">
+<meta property="og:url" content="http://yoursite.com/2019/03/27/Transformer模型及基于Keras的复现/index.html">
 <meta property="og:site_name" content="VKYH-2017-8-17">
-<meta property="og:description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-8e5546130fe55e70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/618">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-361cf7fbb64a932b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-c8a9567586a31db7.png?imageMogr2/auto-orient/">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-e8a7a6e391a479a6.png?imageMogr2/auto-orient/">
-<meta property="og:updated_time" content="2018-02-23T03:18:54.755Z">
+<meta property="og:description" content="1.动态词向量技术先说以下动态词向量吧。这个东西其实本质上来讲还是需要由word embedding基础上进一步处理。其借助于seq2seq模型，经过encoder端将文本序列动态编码成数值矩阵，其本质上已经脱离了传统词向量模型基于词相似度生成的特征矩阵。对于动态这种词的理解，可以按照Transformer来理解。在encoder端中，通过几层self-attention并行处理，其依据序列语言模">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/10738320-545df756d1e3867e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2019-03-27T09:34:52.195Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="机器学习算法实践之贝叶斯算法">
-<meta name="twitter:description" content="本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。1.朴素贝叶斯算法理论朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460">
+<meta name="twitter:title" content="Transformer模型及基于Keras的复现">
+<meta name="twitter:description" content="1.动态词向量技术先说以下动态词向量吧。这个东西其实本质上来讲还是需要由word embedding基础上进一步处理。其借助于seq2seq模型，经过encoder端将文本序列动态编码成数值矩阵，其本质上已经脱离了传统词向量模型基于词相似度生成的特征矩阵。对于动态这种词的理解，可以按照Transformer来理解。在encoder端中，通过几层self-attention并行处理，其依据序列语言模">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/10738320-545df756d1e3867e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
 
 
 
@@ -140,13 +136,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/02/23/机器学习算法实践之贝叶斯算法/"/>
+  <link rel="canonical" href="http://yoursite.com/2019/03/27/Transformer模型及基于Keras的复现/"/>
 
 
 
 
 
-  <title>机器学习算法实践之贝叶斯算法 | VKYH-2017-8-17</title>
+  <title>Transformer模型及基于Keras的复现 | VKYH-2017-8-17</title>
   
 
 
@@ -263,7 +259,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/23/机器学习算法实践之贝叶斯算法/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/27/Transformer模型及基于Keras的复现/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="VKYH">
@@ -280,7 +276,7 @@
 
         
         
-          <h2 class="post-title" itemprop="name headline">机器学习算法实践之贝叶斯算法</h2>
+          <h2 class="post-title" itemprop="name headline">Transformer模型及基于Keras的复现</h2>
         
 
         <div class="post-meta">
@@ -292,8 +288,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-23T08:32:56+08:00">
-                2018-02-23
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-27T17:23:12+08:00">
+                2019-03-27
               </time>
             
 
@@ -330,16 +326,9 @@
       
 
       
-        <p>本文作为算法实践系列第二篇，将重点讲解朴素贝叶斯算法与贝叶斯算法理论与应用。<br><strong>1.朴素贝叶斯算法理论</strong><br>朴素贝叶斯算法是基于贝叶斯定理与特征条件独立假设的分类方法。对于给定的训练数据集合，首先基于特征条件独立假设学习输入/输出的联合概率分布，然后基于此模型，对于给定的输入的X，利用贝叶斯定理求出后验概率最大的输出的Y值，即为输入实例所属的分类。<br>此处假设输入空间X为n维向量的集合，输出空间为数据分类标记集合Y={c1,c2,c3….,ck},x是定义在X上的随机向量，y是定义在Y上的随机向量，p(x,y)是x和y的联合概率分布，训练数据集T={(x1,y1),(x2,y2),…,(xN,yN)}是由P(x,y)独立同分布产生的。在上述条件下，朴素贝叶斯法通过训练数据集，先学习先验概率分布p(Y=ck),k=1,2….K,之后在学习条件概率分布P(X=x|Y=ck)=P(X(1)=x(1),…,X(n)=x(n)|Y=ck),k=1,2,….,K(注意:此处(n)是指输入空间的第n个特征向量，也可以理解为上标序号)。最后学习得出两者参数值后，在运用贝叶斯定理，对给定的输入实例x=(x(1),x(2),x(3),…x(n))^T的后验概率P(Y=ck)<em>P(X(n)=x(n)|Y=ck)</em>P(X(n-1)=x(n-1)|Y=ck)…<em>P(X(1)=x(1)|Y=ck)计算比较,最终后验概率最大值所在的Y=ck值，即为该输入实例所属分类情况。<br>其中，对于后验概率最大化即为所属输入实例的分类情况，其含义即为满足了期望风险最小化准则，即以此准则推导出的函数式f(x)=arg max(P(ck|X=x))就是朴素贝叶斯法所采用的原理。此处只是略微提一下原理，请勿和判别模型f(X)决策函数搞混，贝叶斯分类方法与朴素贝叶斯都属于生成模型，由数据驱动学习概率分布得出分类结论，没有决策函数f(x).<br><strong>2.朴素贝叶斯算法实践步奏</strong><br><strong><strong>2.1 前置理论——极大似然估计</strong></strong><br>朴素贝叶斯法中，学习表示通过数据出发估计先验概率P(Y=ck)和条件概率P(X(n)=x(n)|Y=ck)，一般通过极大似然估计法估计相应概率。首先，先验概率P(Y=ck)的极大似然估计计算式如下图所示：<br><img src="https://upload-images.jianshu.io/upload_images/10738320-3dd33acbced569c4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/460" alt="图1 先验概率计算式"><br>其中I为指示函数，满足条件值为1否则为0。之后，在设第j个特征向量x(j)可能取值的集合为{a[j,1],a[j,2],a[j,3],……,a[j,S]},条件概率p(X(j)=a[i,j]|Y=cK)的极大似然估计计算式即为:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-8e5546130fe55e70.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/618" alt="图2 条件概率计算式"><br>其中j=1,2,…,n;l=1,2,…,s;k=1,2,….,K,式中x(i)(j)是指第i个样本的第j个特征，a[j,l]是指第j个特征可能取第l个值。<br><strong><em>*2.2 算法实践步奏</em></strong></em></p>
-<blockquote>
-<ul>
-<li>对数据进行预处理</li>
-<li>计算数据集中每个特征向量的先验概率和条件概率</li>
-<li>对于给定的实例x=(x(1),x(2),x(3),…x(n))^T,计算后验概率P(Y=ck)<em>P(X(n)=x(n)|Y=ck)</em>P(X(n-1)=x(n-1)|Y=ck)…*P(X(1)=x(1)|Y=ck)的值</li>
-<li>得到最后根据后验概率大小得到输入实例预测的分类结果。</li>
-</ul>
-</blockquote>
-<p><strong>3.朴素贝叶斯算法实践</strong><br>具体代码我已上传至Git仓库，详情请<a href="https://github.com/yanhan19940405/MachineLearning-algorithm/tree/master/Bayes%20algorithm" target="_blank" rel="external">点击查看</a>，<br>数据为模拟分类数据，所用python为3.5版本，执行结果如图所示:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-361cf7fbb64a932b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/700" alt="图3 代码实践执行结果"><br><strong>4.贝叶斯估计理论</strong><br>在用朴素贝叶斯算法进行数据分类处理时，可能会遇到所要估计的概率值为0的情况。这种情况是会影响到具体的后验概率计算结果，使得分类产生偏差，鉴于此，使用贝叶斯估计方法就可以避免上述问题。其中，贝叶斯估计执行逻辑与朴素贝叶斯一样，唯一的区别在于先验概率和条件概率计算式不同。<br>其中，先验概率的贝叶斯估计为:<br><img src="https://upload-images.jianshu.io/upload_images/10738320-c8a9567586a31db7.png?imageMogr2/auto-orient/" alt="图3 贝叶斯估计先验概率"><br>条件概率的贝叶斯估计为：<br><img src="https://upload-images.jianshu.io/upload_images/10738320-e8a7a6e391a479a6.png?imageMogr2/auto-orient/" alt="图4 贝叶斯估计条件概率"><br>在上述式子中，λ≥0，等价于在随机变量各个取值的频数上加上一个正数λ&gt;0。当λ=0时为极大似然估计。在常用的数据分类器中，取λ=1称为拉普拉斯平滑（Laplace smoothing）。最终该算法学习过程与朴素贝叶斯学习过程一样，就不在对其代码进行扩展，整个贝叶斯相关的算法基础模型也就到这里结束了。</p>
+        <p><strong>1.动态词向量技术</strong><br>先说以下动态词向量吧。这个东西其实本质上来讲还是需要由word embedding基础上进一步处理。其借助于seq2seq模型，经过encoder端将文本序列动态编码成数值矩阵，其本质上已经脱离了传统词向量模型基于词相似度生成的特征矩阵。对于动态这种词的理解，可以按照Transformer来理解。在encoder端中，通过几层self-attention并行处理，其依据序列语言模型结构，动态计算每一个词的att权值，从而给了每个词的分布概率。最终依托此权值进一步生成attention数值编码。这种迁移学习的编码方式得到的矩阵中包含了文本上下文信息，也解决了部分语序理解问题。</p>
+<p>而传统的词向量模型，只是单纯依托于词相似度，同时通过建立的索引词典进行数值编码，这种方式无法解决同义词问题。对于文本前后信息的理解也并未达到良好程度，因此算是落后了吧。<br><strong>2.Transformer模型理论与结构</strong><br><img src="https://upload-images.jianshu.io/upload_images/10738320-545df756d1e3867e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 Transformer图"></p>
+<p>Transformer模型结构其实很简单，其本质上是seq2seq模型的变种。首先在Encoder端，其通过将输入文本经过embedding层look up操作后，得到Word embedding矩阵。然后与词位置矩阵进行加性连接，赋予静态词向量词位置关系这类特征。在此基础上输入到多层self attention层构成的Muti-head注意力层中建立序列的动态编码矩阵，后为了避免深度网络所带来的梯度消失问题，做了一次残差连接。通过一层BP神经网络与第二次残差，即得到了最终encoder端的编码值。而在Decoder端，将target序列进行同样嵌入操作后，通过一次带有mask操作的muti-attention层处理，结合encoder端生成的编码矩阵（也叫state状态矩阵）再次经过attention+BP网络处理。最终通过一步线性变化，通过softmax即可得到序列中各个词的输出概率大小。在模型构建中，还加入了Batch Normalization层加速训练，同时避免过拟合。<br><strong>3.Transformer模型的应用</strong><br>用法很简单，首先在分类场景下，你只需要一个encoder+softmax即可作为文本分类的baseline，后续进行微调即可。当然，如果你觉得只有encoder不舒服，在后面自己接入其他神经网络模型进行处理也可以。其次，对于文本摘要，NMT问题，生成式对话而言，Decoder端是需要的，但不一定和论文中decoder结构一致，此处不再扩展声明。从这个角度上来看，Transformer反而Encoder是最重要的结构了。<br><strong>4.基于keras的模型复现</strong><br>这部分请<a href="https://github.com/yanhan19940405/Transformer" target="_blank" rel="external">跳转至GIT仓库查看吧</a>，欢迎提Issue。</p>
 
       
     </div>
@@ -364,8 +353,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/02/22/MachineLearning KNN algorithm/" rel="next" title="机器学习算法实践之KNN算法">
-                <i class="fa fa-chevron-left"></i> 机器学习算法实践之KNN算法
+              <a href="/2019/03/24/自然语言处理语序问题及解决思路（部分附源码实现）/" rel="next" title="自然语言处理语序问题及解决思路（部分附源码实现）">
+                <i class="fa fa-chevron-left"></i> 自然语言处理语序问题及解决思路（部分附源码实现）
               </a>
             
           </div>
@@ -373,10 +362,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/02/27/机器学习算法实践之感知机模型/" rel="prev" title="机器学习算法实践之感知机模型">
-                机器学习算法实践之感知机模型 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
