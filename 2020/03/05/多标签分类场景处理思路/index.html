@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文关键字： Hexo绿色版，Hexo便携版，Hexo配置，Hexo，U盘1、多标签分类场景定义
+常规的文本分类场景主要为单标签多类别分类问题。而对于描述用户画像之类的场景而言，仅仅用单个标签词将不足以准确描述用户特征情况。现实中将从几个不同角度进行用户画像描述，这也就引出本文模型场景——多标签分类(Muti-label)问题。
+
+多标签分类问题（Muti-label Task）如上图所示。假设输">
+<meta property="og:type" content="article">
+<meta property="og:title" content="多标签分类场景处理思路">
+<meta property="og:url" content="http://yoursite.com/2020/03/05/多标签分类场景处理思路/index.html">
+<meta property="og:site_name" content="VKYH-2017-8-17">
+<meta property="og:description" content="本文关键字： Hexo绿色版，Hexo便携版，Hexo配置，Hexo，U盘1、多标签分类场景定义
+常规的文本分类场景主要为单标签多类别分类问题。而对于描述用户画像之类的场景而言，仅仅用单个标签词将不足以准确描述用户特征情况。现实中将从几个不同角度进行用户画像描述，这也就引出本文模型场景——多标签分类(Muti-label)问题。
+
+多标签分类问题（Muti-label Task）如上图所示。假设输">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/1.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/2.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/3.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/4.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/5.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/6.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/7.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/8.png?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/9.png?raw=true">
+<meta property="og:updated_time" content="2020-03-05T09:18:26.208Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="多标签分类场景处理思路">
+<meta name="twitter:description" content="本文关键字： Hexo绿色版，Hexo便携版，Hexo配置，Hexo，U盘1、多标签分类场景定义
+常规的文本分类场景主要为单标签多类别分类问题。而对于描述用户画像之类的场景而言，仅仅用单个标签词将不足以准确描述用户特征情况。现实中将从几个不同角度进行用户画像描述，这也就引出本文模型场景——多标签分类(Muti-label)问题。
+
+多标签分类问题（Muti-label Task）如上图所示。假设输">
+<meta name="twitter:image" content="https://github.com/yanhan19940405/imgclub/blob/master/1.png?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/05/多标签分类场景处理思路/"/>
+
+
+
+
+
+  <title>多标签分类场景处理思路 | VKYH-2017-8-17</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">VKYH-2017-8-17</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">未实践之事，无评价之理。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/多标签分类场景处理思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">多标签分类场景处理思路</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-05T16:40:33+08:00">
+                2020-03-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文关键字： <strong>Hexo绿色版</strong>，<strong>Hexo便携版</strong>，<strong>Hexo配置</strong>，<strong>Hexo</strong>，<strong>U盘</strong><br><strong>1、多标签分类场景定义</strong></p>
+<p>常规的文本分类场景主要为单标签多类别分类问题。而对于描述用户画像之类的场景而言，仅仅用单个标签词将不足以准确描述用户特征情况。现实中将从几个不同角度进行用户画像描述，这也就引出本文模型场景——多标签分类(Muti-label)问题。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/1.png?raw=true" alt="图1 多标签分类场景"></p>
+<p>多标签分类问题（Muti-label Task）如上图所示。假设输入数据集集合为X={X1,X2,X3,X4,X5}，X集合中每一个元素Xi表示一个句向量。而对应的集合Y={Y1,Y2,Y3,Y4,Y5}经过独热编码处理，即表示从5个不同角度描述各个句子的标签类别。而与之难以区分的场景为多类别标签分类问题(Muti-class)，具体场景如下图所示。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/2.png?raw=true" alt="图2 多类别分类场景"></p>
+<p>在相应多类别分类数据中，每一个数据实例对应的分类标签为确定类型标签，但不同类别的标签同属一种角度描述实例的标签类别。对于多标签分类问题而言，不同角度的标签集合Y={Y1,Y2,Y3,Y4,Y5}内部存在相互独立和相互关联的两种情况。不同情况模型构建思路也将不同，具体将在下节进行讲解。</p>
+<p><strong>2、多标签分类场景模型构建方案</strong></p>
+<p><strong><strong>2.1 标签角度相互独立的情况</strong></strong></p>
+<p><strong><strong>2.1.1 转化为二分类方法</strong></strong></p>
+<p>对于多标签分类问题，若标签相互独立，且不相关，则第一种处理思路如下图所示。将各角度标签作为不同数据实例的分类标签，通过单独构建二分类模型进行建模处理。按照此方法，若存在K个角度描述的标签，则需要构建K个二分类模型。对于每一个二分类模型而言，其输出类别为“是/否符合此类标签”。该方法对于研究领域而言，建模思路简单，模型效果较好。但工程领域而言，该方案需要重复性模型构建过程，模型数量过多的情况下将不利于模型部署工作。鉴于此，此类方法并非多标签分类场景下的最优解。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/3.png?raw=true" alt="图3 多个二分类场景"></p>
+<p><strong><strong>2.1.2 转化为多分类方法</strong></strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/4.png?raw=true" alt="图4 多分类场景"></p>
+<p>如上图所示，对于多标签分类场景而言，其特点在于标签角度繁多，若能以一种方式将分类方式构建到一个模型中进行处理，则将大大简化具体分类计算复杂度。在转化为多分类策略中，其通过标签合并做法，将完整的Y={Y1,Y2,Y3,Y4,Y5}看做一个大类的合并标签集合。在模型分类器过程中，仅仅只需要进行一次softmax运算，即可转化为相应标签类别。该方法相对于K个二分类而言效率较高，但其问题在于标签合并过程中，无法确保各合并标签数据集分布特性。很可能出现合并标签中，某些类别数量较少，某些类别数量较多，从而导致模型构建过程中存在大量训练偏差。该方法应在标签合并过程中，通过欠采样的数据处理方式，以确保各类别数据分布比例适中为核心目标。最后，对于各类别比例适中的数据集便可使用此方法。但该方法页不适用于多标签存在关联的场景，即在多标签集合中，内部各标签Y互换位置也可能存在整体标签合并集合不一致的情况。</p>
+<p><strong><strong>2.2 标签角度相互关联的情况</strong></strong></p>
+<p>对于类别标签集合Y={Y1,Y2,Y3,Y4,Y5}而言，其内部标签若存在相互关联情况，从而导致传统分类方法无法应对此类需求。目前常见做法，是通过构建大规模标签类别词典进行相关词检索，同时辅以词相似度计算过程，倘若在目标文本中找到了相应标签词或者相似词组，则该文本中即包含相应标签。该方法需要投入大量精力进行语料库归纳，检索，不够智能。<br>对此场景而言，还有一种思路是转化为序列生成场景，但相关过程将在详细讲解了seq模型之后进行补充。</p>
+<p><strong><strong>2.3 通用建模方法</strong></strong></p>
+<p>那么，是否存在一种通用情况呢？目前而言还真有，可以将其称为组合二分类模型。具体建模思路如下。组合二分类模型结构如下图所示，将输入分类器的（batch，maxlen，d）的文本特征张量进行一系列维度变化，最终生成形状为（batch，Y）的分类结果矩阵。该矩阵长度batch表示句子实例，Y表示每个句子的多个角度的标签合并集合。若标签YI产生概率大于等于sigmoid函数临界条件，则该句子实例对应的该角度标签为1，反之为0. 核心通过设置sigmoid激活函数。该方法的核心在于通过矩阵运算，同时结合sigmoid激活函数。将多个角度的标签输入到同一个模型中，通过最后输出各类别标签状态矩阵，进行组合二分类处理，从而得到句子各类别的分类结果。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/5.png?raw=true" alt="图5 组合二分类模型"></p>
+<p>对于组合二分类过程，本文将进行如下矩阵变化实验进行流程演示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/6.png?raw=true" alt="图6 模拟分类器输入矩阵"></p>
+<blockquote>
+<ul>
+<li>1、    假设模型输入到分类器的矩阵如上图所示，该矩阵形状为（6,10），而对应的类别集合为Y={Y1,Y2,Y3,Y4,Y5}，其中宽度10表示文本信息展开量，长度6表示句子实例个数。对于矩阵而言，每一行即表示相应句子的句向量。</li>
+</ul>
+</blockquote>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/7.png?raw=true" alt="图7 分类结果矩阵"></p>
+<blockquote>
+<ul>
+<li>2、    其次将其输入到线性层中，通过矩阵运算改变矩阵维度。后续经过sigmoid激活函数处理。最终得到分类结果矩阵如上图所示。对于分类结果矩阵而言，其长度为6，表示句子数目，宽度为5表示对应的标签类。矩阵内部元素表示对于每一个句子而言，能被归类到某一类标签的概率大小。</li>
+</ul>
+</blockquote>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/8.png?raw=true" alt="图8 标签类别矩阵"></p>
+<blockquote>
+<ul>
+<li>3、后续对于分类结果矩阵，通过选取sigmoid激活函数阈值0.5，来进行类别转换。凡是概率大于等于0.5的分类元素，其对应的标签类别矩阵值为1，反之为0。最终生成如上图所示的标签类别矩阵。图中该矩阵形状为（6 , 5），即表示每一个句子能被归为的标签类别情况。</li>
+</ul>
+</blockquote>
+<p>综上即为组合二分类模型流程完整流程，各位朋友可以自行尝试下。最后，torch技术非常符合自身需求，后期相关实践将无缝对接该技术。</p>
+<p>最后，原创不易，若有空请博主喝杯咖啡，将会大大激励更多博文产出哟！二维码如下，hhh：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/9.png?raw=true" alt="图9 二维码"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/07/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+  <div id="lv-container" data-id="city" data-uid=""></div>
+      
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="VKYH" />
+          <p class="site-author-name" itemprop="name">VKYH</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VKYH</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
