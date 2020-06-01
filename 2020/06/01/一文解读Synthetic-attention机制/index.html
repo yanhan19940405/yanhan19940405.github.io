@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文关键字： Synthetic，attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+2020年5月25日，谷歌发表了一篇对自注意力机制的深度思考大作，笔者仔细读后顿感耳目一新。鉴于此，笔者将在此进行初步解读和阐述相应机理。首先，我们回忆一下传统自注意力机制过程。自注意力机制过程图如下所示：
+
+首先，假设输入一个句子，将该句转换为相应的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一文解读Synthetic-attention机制">
+<meta property="og:url" content="http://yoursite.com/2020/06/01/一文解读Synthetic-attention机制/index.html">
+<meta property="og:site_name" content="VKYH-2017-8-17">
+<meta property="og:description" content="本文关键字： Synthetic，attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+2020年5月25日，谷歌发表了一篇对自注意力机制的深度思考大作，笔者仔细读后顿感耳目一新。鉴于此，笔者将在此进行初步解读和阐述相应机理。首先，我们回忆一下传统自注意力机制过程。自注意力机制过程图如下所示：
+
+首先，假设输入一个句子，将该句转换为相应的">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/20.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/21.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/22.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/23.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/24.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/25.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/26.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/27.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/28.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/29.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/30.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/31.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/32.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/33.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/34.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/35.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/36.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/37.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/38.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/39.jpg?raw=true">
+<meta property="og:updated_time" content="2020-06-01T12:16:45.659Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一文解读Synthetic-attention机制">
+<meta name="twitter:description" content="本文关键字： Synthetic，attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+2020年5月25日，谷歌发表了一篇对自注意力机制的深度思考大作，笔者仔细读后顿感耳目一新。鉴于此，笔者将在此进行初步解读和阐述相应机理。首先，我们回忆一下传统自注意力机制过程。自注意力机制过程图如下所示：
+
+首先，假设输入一个句子，将该句转换为相应的">
+<meta name="twitter:image" content="https://github.com/yanhan19940405/imgclub/blob/master/20.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/01/一文解读Synthetic-attention机制/"/>
+
+
+
+
+
+  <title>一文解读Synthetic-attention机制 | VKYH-2017-8-17</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">VKYH-2017-8-17</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">未实践之事，无评价之理。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/01/一文解读Synthetic-attention机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">一文解读Synthetic-attention机制</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T19:46:27+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文关键字： <strong>Synthetic</strong>，<strong>attention</strong></p>
+<p>注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。</p>
+<p>2020年5月25日，谷歌发表了一篇对自注意力机制的深度思考大作，笔者仔细读后顿感耳目一新。鉴于此，笔者将在此进行初步解读和阐述相应机理。首先，我们回忆一下传统自注意力机制过程。自注意力机制过程图如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/20.jpg?raw=true" alt="图1 self-attention机制"></p>
+<p>首先，假设输入一个句子，将该句转换为相应的数值向量为X={W0,W1,W2,W3}。首先通过下面三个计算式将句子每一个词粒度(Token)元素W0,W1,W2,W3通过线性变化，转换为相应词粒度向量，计算式如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/21.jpg?raw=true" alt="图2 self-attention机制公式"></p>
+<p>式中WQ、WK、WV表示待训练确认的超参数。待得到相应Query、Key、Value矩阵后，将Query矩阵与Key矩阵进行相似度匹配，根据下面的式子计算得到相似度矩阵f(Key,Query)。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/22.jpg?raw=true" alt="图3 公式"></p>
+<p>待得到了相似度值后，将相似度值进行归一化处理得到注意力权重矩阵a_j，通过公式5进行计算。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/23.jpg?raw=true" alt="图4 公式"></p>
+<p>在计算式（5）中，〖f(Key,Query)〗_i表示Query矩阵与Key矩阵中计算得到的相似度分数矩阵内部的任意一行向量。此外，j的取值范围为[0,n]，n表示句子长度。经过该式处理后，便将Query矩阵中一个词粒度的相似度向量转化为数值范围为0-1之间的注意力权值向量a_j。得到权值向量后，便通过计算式(6)将权值向量转换为句子层级的注意力矩阵AttentionValue。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/24.jpg?raw=true" alt="图5 公式"></p>
+<p>计算式中j值的取值范围为[0,n]，其中n表示句子长度。注意力矩阵AttentionValue内部元素概率大小不一，其本质将呈现出重点词语与按照句子语法规则排布的词组匹配所得到的概率大小。<br>那么，对于自注意力机制而言，Query、Key、Value矩阵是必须的吗？为了解答这个问题，首先我们对传统的自注意力计算过程进行简单的数学变化来看看。<br>假设自注意力机制输入的token所在序列为X={X0,X1,X2,…,Xi}，序列长度为L，模型中词向量宽度为d，则矩阵X中每个词映射到词向量宽度后构成矩阵维度为（L,d）。在传统自注意力机制计算中，相似度计算函数f(Key,Query)将输入形状为（L,d）的矩阵变换为（L，L）。因此，在Synthetic注意力机制中假设不需要内部Token相似度计算过程，将使用如下式来代替上述矩阵运算过程：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/25.jpg?raw=true" alt="图6 公式"></p>
+<p>其中函数F（.）为含参类型的函数，其作用是将每一个token所构成的向量由d维度映射到L维度。同时，我们将传统自注意力机制中的value矩阵忽略掉，用如下式来替代：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/26.jpg?raw=true" alt="图7 公式"></p>
+<p>该式子作用为由原始形状为（L，d）的序列矩阵X得到形状大小相同的矩阵G(X)。到此处，我们便可以得到全新的自注意力机制计算的数学方法：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/27.jpg?raw=true" alt="图8 公式"></p>
+<p>其中注意力机制输出值Y(X)的形状为(L,d),这里和传统Transformer中的自注意力输出矩阵大小相同。到这里，我们便可以得到如下2点条件：</p>
+<blockquote>
+<ul>
+<li><p>1、数学式7-9即为内部注意力机制前向计算的一般性数学表述过程，其描述范围大于传统基于相似度匹配的描述过程，从而脱离了相似性匹配的计算过程。</p>
+</li>
+<li><p>2、新引入的动态方法F(X)、G(X)是与传统内部注意力计算过程中所用方法相比，具有等同的矩阵维度变化过程，计算方法多种多样。</p>
+</li>
+</ul>
+</blockquote>
+<p><strong><strong>1、Dense Synthesizer</strong></strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/28.jpg?raw=true" alt="图9 公式"></p>
+<p>谷歌这篇论文中，Dense Synthesizer数学过程如上所示，其使用两层全连接层进行矩阵变换，从而替代传统相似度匹配过程。其中σR为ReLu激活函数。模型结构图如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/29.jpg?raw=true" alt="图9 Dense Synthesizer"></p>
+<p>该混合模型用全两层连接层替代了相似度匹配过程提供相应的矩阵变换过程。从数学表达过程来看，计算式编号10-&gt;7-&gt;8-&gt;9即为整个全连接混合网络前向计算过程。</p>
+<p><strong><strong>2、Random Synthesizer</strong></strong></p>
+<p>随机初始化的混合模型数学过程见式11。该网络将注意力机制中能够使得形状为（L,d）的矩阵变为(L,L)的函数方法舍弃掉，从而使用形状为（L,L）的随初始化矩阵R作为Softmax函数的输入。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/30.jpg?raw=true" alt="图10 Synthesizer"></p>
+<p>该模型网络结构图下图所示。矩阵R随机初始化作为模型输入，在模型训练过程中R矩阵也将为可训练矩阵，从而确保模型可以得到想要的输入信息。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/31.jpg?raw=true" alt="图11 Synthesizer"></p>
+<p><strong><strong>3、Factorized Models</strong></strong></p>
+<p> 由于模型在softmax方法中的矩阵宽度为L，很可能导致模型含有参数量较大，从而对较大的模型训练产生难处。鉴于此，本文对softmax函数的输入矩阵进行了矩阵分解，从而探究了矩阵分解情况下的注意力机制表现情况。</p>
+<p> <strong><em>*</em></strong>3.1、Factorized Dense Synthesizer<strong>**</strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/32.jpg?raw=true" alt="图12 Synthesizer"></p>
+<p> 首先，模型Token向量，通过式子12的全连接网络假设函数计算得到相应分解向量A,B。在计算过程中，向量A宽度由L变为a，向量B宽度由L变为b，且aXb=L。后续通过式子13计算得到形状为（L,L）的矩阵C。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/33.jpg?raw=true" alt="图13 Synthesizer"></p>
+<p> 式子中H(.)表示某种向量复制方法，可以将向量A宽度a变为ab，将向量B宽度由b变为ba。为了避免上述变化过程中，向量A和B中可能包含相似信息，因此这里将所得的隐层向量H(A)与H(B)通过对应元素相乘的形式进行输出，从而得到c向量宽度为ab=L。由于具体向量变化过程中，是由文本序列变化而来，所以对于长度为L的文本序列而言，当多个Token经过上述变化过程后，进行向量合并便得到了形状为(L,L)的矩阵C。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/34.jpg?raw=true" alt="图14 Synthesizer"></p>
+<p>最后通过式子14便得到了模型最终输出矩阵Y。</p>
+<p><strong><em>*</em></strong>3.2、Factorized Random Synthesizer<strong>**</strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/35.jpg?raw=true" alt="图15 Synthesizer"></p>
+<p>该模型来源于Random Synthesizer模型，其将输入到softmax方法中的随机初始化矩阵R分解为形状大小为（L,K）的矩阵R1与R2的转置矩阵乘积形式。论文在具体实践中，K值远远小于L大小，同时基于实践意义考量，K的最小值为8。该模型中R1,R2矩阵也是可训练矩阵。</p>
+<p><strong><strong>4、Mixture of Synthesizers</strong></strong></p>
+<p>从前文可知，在替代相似度的混合计算过程中，也可以通过矩阵相加的方式进行模型构建。改论文中通过一系列构造方法得到了如下式的混合计算的注意力模型。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/36.jpg?raw=true" alt="图16 Synthesizer"></p>
+<p>其中α表示模型学习的权重，S(.)表示矩阵混合运算的函数方法。但混合类型的模型中，矩阵维度变化过程依然需要严格遵循2017年的Transformer中的自注意力机制矩阵变化过程，也就是说，二者相比输入输出矩阵形状大小没有变化。最后，该文中将Random Factorized 和Dense Synthesizers进行了混合，从而得到了见式17所示的混合模型。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/37.jpg?raw=true" alt="图17 Synthesizer"></p>
+<p><strong><strong>5、Synthesizers Attention汇总以及部分实验结果</strong></strong></p>
+<p>该论文中所提出的Synthesizers Attention汇总如下，从图中也可以看出具体的条件。由于语言模型迁移训练，是当前NLP最重要的一个场景。本文在NMT实验中，所得结果如下。<br>在融合了Vanlia Transformer的Synthesizer (Random)方式中，其得到的结果表现效果最好。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/38.jpg?raw=true" alt="图18 Synthesizer"></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/39.jpg?raw=true" alt="图19 Synthesizer"></p>
+<p>结果震撼了！随机初始化的ATT竟然有效果！竟然work！这确实挺令人感到震撼。在语言模型训练过程中，融合了Vanlia Transformer的Synthesizer (Dense)方式中语言模型的困惑度表现较优。当然，该文还有其他实验结果，各位读者可以结合自身情况再次查阅下其他任务以做评判。</p>
+<p><strong><strong>6、一些小的Tips</strong></strong></p>
+<p>写到这，我也有一些个人想法在这，提出来以便于大家思考一下：</p>
+<blockquote>
+<ul>
+<li>1、    Query、Key、Value矩阵是否是注意力机制必须的？</li>
+</ul>
+</blockquote>
+<p>其实从该论文中，个人觉得其换了一种描述方式来阐述注意力机制过程。这种描述方式相比于之前的token相似度匹配过程描述的范围更大，从而更容易包含更多的理论情况，从而通过实验找寻最优解。而传统的相似度匹配过程，可以理解为一种基于检索形式的内部机理过程描述，两者并不冲突，可以看做为承前启后的观点。</p>
+<blockquote>
+<ul>
+<li>2、新引入的动态方法F(X)、G(X)是与传统内部注意力计算过程中所用方法相比，具有等同的矩阵维度变化过程，计算方法多种多样。</li>
+</ul>
+</blockquote>
+<p>其实个人觉得是否能够将Dense更换为CNN等其他模型结构，进行实验以提升模型效果。此外G(X)部分变化过程应该也可以创新。</p>
+<blockquote>
+<ul>
+<li>3、个人仍然觉得此文有些许不足</li>
+</ul>
+</blockquote>
+<p>该论文对G(X)阐述不是很详细，在具体实验中是怎么变换的，个人依然觉得有些不明白之处，还需更进一步关注细节。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/05/多标签分类场景处理思路/" rel="next" title="多标签分类场景处理思路">
+                <i class="fa fa-chevron-left"></i> 多标签分类场景处理思路
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+  <div id="lv-container" data-id="city" data-uid=""></div>
+      
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="VKYH" />
+          <p class="site-author-name" itemprop="name">VKYH</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VKYH</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -257,6 +257,204 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/01/一文解读Synthetic-attention机制/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/01/一文解读Synthetic-attention机制/" itemprop="url">一文解读Synthetic-attention机制</a></h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T19:46:27+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>本文关键字： <strong>Synthetic</strong>，<strong>attention</strong></p>
+<p>注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。</p>
+<p>2020年5月25日，谷歌发表了一篇对自注意力机制的深度思考大作，笔者仔细读后顿感耳目一新。鉴于此，笔者将在此进行初步解读和阐述相应机理。首先，我们回忆一下传统自注意力机制过程。自注意力机制过程图如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/20.jpg?raw=true" alt="图1 self-attention机制"></p>
+<p>首先，假设输入一个句子，将该句转换为相应的数值向量为X={W0,W1,W2,W3}。首先通过下面三个计算式将句子每一个词粒度(Token)元素W0,W1,W2,W3通过线性变化，转换为相应词粒度向量，计算式如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/21.jpg?raw=true" alt="图2 self-attention机制公式"></p>
+<p>式中WQ、WK、WV表示待训练确认的超参数。待得到相应Query、Key、Value矩阵后，将Query矩阵与Key矩阵进行相似度匹配，根据下面的式子计算得到相似度矩阵f(Key,Query)。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/22.jpg?raw=true" alt="图3 公式"></p>
+<p>待得到了相似度值后，将相似度值进行归一化处理得到注意力权重矩阵a_j，通过公式5进行计算。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/23.jpg?raw=true" alt="图4 公式"></p>
+<p>在计算式（5）中，〖f(Key,Query)〗_i表示Query矩阵与Key矩阵中计算得到的相似度分数矩阵内部的任意一行向量。此外，j的取值范围为[0,n]，n表示句子长度。经过该式处理后，便将Query矩阵中一个词粒度的相似度向量转化为数值范围为0-1之间的注意力权值向量a_j。得到权值向量后，便通过计算式(6)将权值向量转换为句子层级的注意力矩阵AttentionValue。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/24.jpg?raw=true" alt="图5 公式"></p>
+<p>计算式中j值的取值范围为[0,n]，其中n表示句子长度。注意力矩阵AttentionValue内部元素概率大小不一，其本质将呈现出重点词语与按照句子语法规则排布的词组匹配所得到的概率大小。<br>那么，对于自注意力机制而言，Query、Key、Value矩阵是必须的吗？为了解答这个问题，首先我们对传统的自注意力计算过程进行简单的数学变化来看看。<br>假设自注意力机制输入的token所在序列为X={X0,X1,X2,…,Xi}，序列长度为L，模型中词向量宽度为d，则矩阵X中每个词映射到词向量宽度后构成矩阵维度为（L,d）。在传统自注意力机制计算中，相似度计算函数f(Key,Query)将输入形状为（L,d）的矩阵变换为（L，L）。因此，在Synthetic注意力机制中假设不需要内部Token相似度计算过程，将使用如下式来代替上述矩阵运算过程：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/25.jpg?raw=true" alt="图6 公式"></p>
+<p>其中函数F（.）为含参类型的函数，其作用是将每一个token所构成的向量由d维度映射到L维度。同时，我们将传统自注意力机制中的value矩阵忽略掉，用如下式来替代：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/26.jpg?raw=true" alt="图7 公式"></p>
+<p>该式子作用为由原始形状为（L，d）的序列矩阵X得到形状大小相同的矩阵G(X)。到此处，我们便可以得到全新的自注意力机制计算的数学方法：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/27.jpg?raw=true" alt="图8 公式"></p>
+<p>其中注意力机制输出值Y(X)的形状为(L,d),这里和传统Transformer中的自注意力输出矩阵大小相同。到这里，我们便可以得到如下2点条件：</p>
+<blockquote>
+<ul>
+<li><p>1、数学式7-9即为内部注意力机制前向计算的一般性数学表述过程，其描述范围大于传统基于相似度匹配的描述过程，从而脱离了相似性匹配的计算过程。</p>
+</li>
+<li><p>2、新引入的动态方法F(X)、G(X)是与传统内部注意力计算过程中所用方法相比，具有等同的矩阵维度变化过程，计算方法多种多样。</p>
+</li>
+</ul>
+</blockquote>
+<p><strong><strong>1、Dense Synthesizer</strong></strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/28.jpg?raw=true" alt="图9 公式"></p>
+<p>谷歌这篇论文中，Dense Synthesizer数学过程如上所示，其使用两层全连接层进行矩阵变换，从而替代传统相似度匹配过程。其中σR为ReLu激活函数。模型结构图如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/29.jpg?raw=true" alt="图9 Dense Synthesizer"></p>
+<p>该混合模型用全两层连接层替代了相似度匹配过程提供相应的矩阵变换过程。从数学表达过程来看，计算式编号10-&gt;7-&gt;8-&gt;9即为整个全连接混合网络前向计算过程。</p>
+<p><strong><strong>2、Random Synthesizer</strong></strong></p>
+<p>随机初始化的混合模型数学过程见式11。该网络将注意力机制中能够使得形状为（L,d）的矩阵变为(L,L)的函数方法舍弃掉，从而使用形状为（L,L）的随初始化矩阵R作为Softmax函数的输入。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/30.jpg?raw=true" alt="图10 Synthesizer"></p>
+<p>该模型网络结构图下图所示。矩阵R随机初始化作为模型输入，在模型训练过程中R矩阵也将为可训练矩阵，从而确保模型可以得到想要的输入信息。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/31.jpg?raw=true" alt="图11 Synthesizer"></p>
+<p><strong><strong>3、Factorized Models</strong></strong></p>
+<p> 由于模型在softmax方法中的矩阵宽度为L，很可能导致模型含有参数量较大，从而对较大的模型训练产生难处。鉴于此，本文对softmax函数的输入矩阵进行了矩阵分解，从而探究了矩阵分解情况下的注意力机制表现情况。</p>
+<p> <strong><em>*</em></strong>3.1、Factorized Dense Synthesizer<strong>**</strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/32.jpg?raw=true" alt="图12 Synthesizer"></p>
+<p> 首先，模型Token向量，通过式子12的全连接网络假设函数计算得到相应分解向量A,B。在计算过程中，向量A宽度由L变为a，向量B宽度由L变为b，且aXb=L。后续通过式子13计算得到形状为（L,L）的矩阵C。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/33.jpg?raw=true" alt="图13 Synthesizer"></p>
+<p> 式子中H(.)表示某种向量复制方法，可以将向量A宽度a变为ab，将向量B宽度由b变为ba。为了避免上述变化过程中，向量A和B中可能包含相似信息，因此这里将所得的隐层向量H(A)与H(B)通过对应元素相乘的形式进行输出，从而得到c向量宽度为ab=L。由于具体向量变化过程中，是由文本序列变化而来，所以对于长度为L的文本序列而言，当多个Token经过上述变化过程后，进行向量合并便得到了形状为(L,L)的矩阵C。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/34.jpg?raw=true" alt="图14 Synthesizer"></p>
+<p>最后通过式子14便得到了模型最终输出矩阵Y。</p>
+<p><strong><em>*</em></strong>3.2、Factorized Random Synthesizer<strong>**</strong></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/35.jpg?raw=true" alt="图15 Synthesizer"></p>
+<p>该模型来源于Random Synthesizer模型，其将输入到softmax方法中的随机初始化矩阵R分解为形状大小为（L,K）的矩阵R1与R2的转置矩阵乘积形式。论文在具体实践中，K值远远小于L大小，同时基于实践意义考量，K的最小值为8。该模型中R1,R2矩阵也是可训练矩阵。</p>
+<p><strong><strong>4、Mixture of Synthesizers</strong></strong></p>
+<p>从前文可知，在替代相似度的混合计算过程中，也可以通过矩阵相加的方式进行模型构建。改论文中通过一系列构造方法得到了如下式的混合计算的注意力模型。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/36.jpg?raw=true" alt="图16 Synthesizer"></p>
+<p>其中α表示模型学习的权重，S(.)表示矩阵混合运算的函数方法。但混合类型的模型中，矩阵维度变化过程依然需要严格遵循2017年的Transformer中的自注意力机制矩阵变化过程，也就是说，二者相比输入输出矩阵形状大小没有变化。最后，该文中将Random Factorized 和Dense Synthesizers进行了混合，从而得到了见式17所示的混合模型。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/37.jpg?raw=true" alt="图17 Synthesizer"></p>
+<p><strong><strong>5、Synthesizers Attention汇总以及部分实验结果</strong></strong></p>
+<p>该论文中所提出的Synthesizers Attention汇总如下，从图中也可以看出具体的条件。由于语言模型迁移训练，是当前NLP最重要的一个场景。本文在NMT实验中，所得结果如下。<br>在融合了Vanlia Transformer的Synthesizer (Random)方式中，其得到的结果表现效果最好。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/38.jpg?raw=true" alt="图18 Synthesizer"></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/39.jpg?raw=true" alt="图19 Synthesizer"></p>
+<p>结果震撼了！随机初始化的ATT竟然有效果！竟然work！这确实挺令人感到震撼。在语言模型训练过程中，融合了Vanlia Transformer的Synthesizer (Dense)方式中语言模型的困惑度表现较优。当然，该文还有其他实验结果，各位读者可以结合自身情况再次查阅下其他任务以做评判。</p>
+<p><strong><strong>6、一些小的Tips</strong></strong></p>
+<p>写到这，我也有一些个人想法在这，提出来以便于大家思考一下：</p>
+<blockquote>
+<ul>
+<li>1、    Query、Key、Value矩阵是否是注意力机制必须的？</li>
+</ul>
+</blockquote>
+<p>其实从该论文中，个人觉得其换了一种描述方式来阐述注意力机制过程。这种描述方式相比于之前的token相似度匹配过程描述的范围更大，从而更容易包含更多的理论情况，从而通过实验找寻最优解。而传统的相似度匹配过程，可以理解为一种基于检索形式的内部机理过程描述，两者并不冲突，可以看做为承前启后的观点。</p>
+<blockquote>
+<ul>
+<li>2、新引入的动态方法F(X)、G(X)是与传统内部注意力计算过程中所用方法相比，具有等同的矩阵维度变化过程，计算方法多种多样。</li>
+</ul>
+</blockquote>
+<p>其实个人觉得是否能够将Dense更换为CNN等其他模型结构，进行实验以提升模型效果。此外G(X)部分变化过程应该也可以创新。</p>
+<blockquote>
+<ul>
+<li>3、个人仍然觉得此文有些许不足</li>
+</ul>
+</blockquote>
+<p>该论文对G(X)阐述不是很详细，在具体实验中是怎么变换的，个人依然觉得有些不明白之处，还需更进一步关注细节。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/05/多标签分类场景处理思路/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1507,127 +1705,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/02/28/区块链技术体系初步/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="VKYH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="VKYH-2017-8-17">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h2 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/02/28/区块链技术体系初步/" itemprop="url">区块链技术体系初步</a></h2>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-28T11:01:59+08:00">
-                2018-02-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p><strong>1.背景</strong><br>在传统互联网的TCP/IP协议下，我们进入了信息爆炸时代。在当前情况下，信息快速成型，低成本传输与大量信息共享得到了实现。目前的互联网金融模式是以中心化记账形式来进行等价值货币转移而运行的，比如A在互联网上转账给B，A需要通过网上发送请求给中心化机构承担者，通过在中心机构记账的方式，将信息转化为价值，再由中心机构将等价值的货币转移至B的账户上。这种情况需要政府或者企业利用信用为中心化机构承担者做出保障，但由于传统信息互联网部分个体篡改局部数据情况无法及时发现甚至无法掌握相应情况，因此这种结构依然存在安全性问题。<br> 因此，我们如何实现传统网络传递价值？这就是近几年火起来的新技术——区块链。2008年中本聪在互联网上一个讨论信息加密的邮件组中发表了一篇文章，文章名叫《Bitcoin: A Peer-to-Peer Electronic Cash System》，勾画了比特币系统的基本框架。 2009年他为该系统建立了一个开放源代码项目 (open source project)，正式宣告了比特币的诞生。区块链技术刚开始是为了支持比特币生成与交易而产生的底层技术，其目的是通过建立去中心化的信任，从而不再依托于单个中心结构记账，从而通过P2P网络直接进行价值交换，从而使得实现传统信息交换互联网变为价值交换互联网成了可能。后续这门技术得到了进一步提炼发展，便从比特币中提取出来，成了今天的区块链技术。<br> <strong>2.区块链的初步以及几个名词解释</strong><br> <strong><strong>2.1 什么是信用？</strong></strong><br> 信用，是指依附在人之间、单位之间和商品交易之间形成的一种相互信任的生产关系和社会关系。如果我们用数据m量化描述这个概念，那么当m的值越高，则描述个体的信用程度越大，人们就更容易相信该个体发布的交易与账户信息。目前的中心化交易体系就是如此，国家建立法制的社会信用体系，利用国家公信力与强有力的法律为银行做保证，从而提升市场对于银行的信用程度，通过银行这一中心化的组织来进行经济行为有效监管与控制。然后大型互联网企业则利用自身平台影响力，不断提升自己平台影响力，通过自身理念与遵守相关法律法规增加用户对其信用基础，从而让用户能够安心使用平台所提供的网络价值交换服务。<br> <strong><strong>2.2 什么是价值转移？</strong></strong><br> 价值转移，是指具有同等购买力的货币进行流通。在当前金融体系下，价值转移行为需要由第三方进行价值记账，价值交换等行为的操作，控制，才能实现价值在不同个体间的转移。<br> <strong><strong>2.3 什么是P2P网络？</strong></strong><br>P2P网络，即对等网络（Peer-to-peer networking），网络参与者共享他们自己的硬件资源（处理能力，存储容量，网络连接，打印机等）的一部分，通过网络提供服务和内容，并且可以由其他对等方直接访问而无需中间实体。 该网络的参与者既是资源，服务和内容提供者（服务器），也是资源，服务和内容获取者。在P2P网络环境中，多台彼此连接的计算机处于相同的位置。 一台电脑可以作为服务器并为网络设置共享资源使用其他计算机，也可作为工作站，网络一般不依赖于专用的集中式服务器，也没有专门的工作站。 网络中的每台计算机既用作对网络服务的请求，也用于响应其他计算机提供资源，服务和内容的请求。<br> <strong><strong>2.4 区块链的定义</strong></strong><br> 区块链技术是指一种去中心化的分布式共享记账存储技术，本质上是数据库技术，是一连串使用密码学方法产生相关联的数据块，每一个数据块即为区块，其包含了一段时间内全网交易信息和用于验证其有效性的信息，每一个区块通过指针连接，上一个区块可以创建下一个区块，整体呈现链式排布。<br>如下图所示，即为传统中心化交易体系，这类体系下中心企业信用度指数要高，同时对于现有以信息传递的互联网体系下，无法实现在线价值转移必须经过第三方平台转移之后才能实现此功能。<br><img src="http://upload-images.jianshu.io/upload_images/10738320-3a28b8f7e0b649bb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图1 中心化交易体系"></p>
-<p>这类体系存在如下问题：1.黑客可以修改转账信息，更改数据后，如果无有效交易检验方法，则在现有的信息网络情况下，这种情况不容易被发现，然后矫正。2.中心化体系下，必须对于中心单位给予强有力的信用保证，但对于网上支付平台下，大部分企业自监自查，一旦中心单位出现数据丢失等不可控困难，这种情况存在很大经济波动风险。3.传统交易体系下，网上支付无法直接在线进行价值交换，使用不是很方便。为了解决上述问题，区块链技术便横空出世了。<br><strong><strong>2.5 区块链系统交易过程</strong></strong><br>如下图所示，在区块链技术体系下，一个区块链系统有很多节点构成，每一个参与的节点都能够记账，即更新数据库信息。区块一利用私钥签名创建交易后，将信息发往全网进行广播，其交易记录通过P2P网络向后传播，然后经过系统共识机制对交易进行验证，确定交易信息有效性后，将验证结果与上一个节点交易记录一起再次利用P2P网络传递给下去，最后各个记账节点依托于验证结果将交易记录写入账本，更新区块存储信息，从而实现了去中心化的分布式记账。<br>而共识机制是用来确定分布式系统节点中的账本记录节点的一种机制，其中目前最常用的是工作量证明机制——各个节点通过区块接入系统，通过本地计算能力高低来确认记账与否的能力。计算能力越高的节点，则越能成为账本记录节点，就能将自己节点的交易信息形成一个新的区块加入链中。一旦加入链中，如果想要修改一个区块链中某个区块交易信息，就必须完成该区块与后一个区块的工作量，从而让更改数据成为不可能。<br><img src="http://upload-images.jianshu.io/upload_images/10738320-2614154946b819f2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图2 区块链交易过程"><br>鉴于此，实现区块链技术的关键因素也就出来了，即:1.由于每个节点可以自由加入或退出系统，则形成有效的盘P2P动态网络是关键因素。2.形成时间有序排列的切不可更改的系统主体交易账本（由于个体交易账本篡改不会影响后续节点，真实交易记录会在多个节点存在，因此更改局部节点交易账本一般不会对整体系统产生作用）。3.系统含有有效的统一采用的共识机制模型。<br><strong>3.区块链技术理论详解</strong><br><strong><strong>3.1 区块与区块链结构</strong></strong><br><img src="http://upload-images.jianshu.io/upload_images/10738320-9f17b969edf2869b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图3 区块结构"><br>区块结构如上图所示，每一个区块包含前一个区块ID，交易记录信息，本区块ID等信息。其中交易记录也被称作账本，其结构有两种，一种是采用链式Hash结构防篡改，一串数据hash区块组成链，每个区块账本包含了最近交易集合的hash值，一旦某个部分数据更改，那么hash校验就会出现许多新的结果，从而实现欺骗行为的甄别。另一种是采用公钥密码机制标识的资产所有者，从而利用公钥做为标识，仅仅只有相应私钥的用户才能拥有转移价值行为操作基础。<br><img src="http://upload-images.jianshu.io/upload_images/10738320-74c585d2ac9aadc4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图4 区块链结构"><br>如上图所示，区块链是由多个区块连接起来的一种链式结构，区块链之间彼此用指针相互对应关联起来，如图3.1-2，由于每一个区块都可以创建一个新的区块，故需要一种共识机制，也是目前应用最广泛的工作量证明机制，通过比拼不同区块也就是节点的计算能力，算力越高，则就越能获得合法的记账权，从而挂载入区块链，同时产生下一个区块。算力不高的区块就无法挂载入链中，其原理类似于大自然中动物群体生殖权争夺。而新区块的ID不一定是前一个区块加1，此处仅仅作为合理性展示才如此画图。除此外，链越长，信用指数越高，越容易受到人们认可，除此外区块链采用高冗余度的存储系统来进行数据存储，在运用工作量证明机制后，也带来高能耗等缺点，此处我们后面再谈。<br><strong><strong>3.2 区块链的模型架构</strong></strong><br>首先提两个概念，公有区块链与私有区块链。公有区块链是指全世界任何人都有权限，可随时随地读取的、任何人都能发送交易且交易能获得有效确认的、任何人都能参与其中共识过程的区块链，对用户访问区块链系统不做权限限制的区块链，链越长信用度就越高，这也是公有链越能获得大多数人认可的重要原因。而私有区块链通过严格的权限限制供特定人访问运行，安全度得不到保障。<br>如下图所示，区块链模型结构类似于TCP/IP模型结构一样，由图中所示六层组成，从技术最底层向上排列分别是数据层、网络层、共识层、激励层、合约层、应用层。其中数据层，封装了底层数据区块的链式结构和相关的非对称数据加密技术和时间戳等技术；网络层，包含了分布式组网机制数据传播和验证机制，对于交易过程控制意义重大；共识层封装网络节点的共识机制算法模型，对于确立记账节点有重大作用；激励层则包含经济发行机制与分配机制，用于激励遵守规则参与记账的节点，惩罚违反规则的节点；合约层则封装各类算法，编程协议，这给了区块链技术编程基础；应用层则为各类区块链应用程序提供了运行环境。其中图中红色三层为区块链必须的层数，其他三层为非必需层数。<br><img src="http://upload-images.jianshu.io/upload_images/10738320-2d2455b54bad9a66.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="图5 区块链模型结构"><br>除此外，在私有链中，一般不含有激励层，可能由私有链使用者添加强制性因素进行记账节点分配。<br><strong><strong>3.3 区块链的共识机制模型</strong></strong><br>共识机制是区块链技术的核心，其主要起到了交易账本信息验证和确认的作用，同时其决定了哪个区块节点为共识记账节点。同时在拼接区块链时，在上一个区块具体挂载下一个区块时的，所需区块节点也由工作量证明机制来决定的。此处介绍两个运用广泛的共识算法模型。<br><strong>**</strong>3.3.1 工作量证明机制(POW)<strong>**</strong><br>如2.5节的图中所示，在一个稳定的，多个节点达成统一共识机制的系统中，其中一个节点作为证明者，提交已知的，难以计算但容易验证的结果，其他任何节点都能通过验证这个结果确信证明者为了求得结果已经大量完成了相应工作量的计算结果，这就是工作量证明机制。比如飞行员有了10000小时飞行时间，则我们都可以相信这个飞行员有高超的驾驶技术，工作量机制与之同理。工作量证明机制中，其利用SHA256 hash算法计算工作量。一个符合要求的区块hash值由n个前导邻，前导邻个数取决于网络的复杂度。要得到合理的区块hash需要大量的运算，运算速度取决于机器hash运算速度。一个节点拥有合理hash值是一个概率性事件，因此当节点拥有合理hash值时，需要运用大量资源进行计算，完成了相当的工作量，因此算力值越高的节点就越能成为记账节点，这也是挖矿时严重耗电的重要因素。<br>获得记账权概率为算力占总节点算力值的概率值，这也为POW系统的安全提供了很高的保障，毕竟要想攻破一个基于POW的区块链系统，没有一定的算力资源可没法攻破这个系统。<br><strong>**</strong>3.3.2 权益证明机制(POS)<strong>**</strong><br> 这是一个shy256算法替代品，避免大量计算工作量的算法模型。其通过对每一笔的交易销毁的币/天数，来实现证明者对某些数量的钱展示所有权。币天数代表一个特定的币，作为网络中权益代表量化单位，一旦有交易发生币天数就会被销毁且无法重复使用。在给定时间点内，存在有限币/天数是有限的，鉴于此在区块链中，持有更多数据货币的人就会有更多币天数，则类似于股份权益，占比更多的人分红更多。<br> POS安全性将不再靠工作量来保护，而是通过链的一体性来决定的其安全性的，即凡是处于POS中的人区别只是收益不同，但大家都有收益的前提是系统安全性，因此其中大股东更加注重链的安全性与完整性。<br><strong><strong>3.3 区块链的类型</strong></strong><br><strong>**</strong>3.3.1 公有链与私有链<strong>**</strong><br> 具体阐述请见3.2区块链模型架构。此处谈一谈公有链与私有链区别，公有链一般含有一个完整的代币系统，在激励层能够奖励遵守规则的记账节点，惩罚违反规则的记账节点，而私有链中节点是某个组织内部节点，注入权限就不会含有代币系统。公有链就类似于互联网，私有链就类似于局域网，当前大部分公司都在采用私有链技术。<br><strong>**</strong>3.3.2 联盟链<strong>**</strong><br>  其共识过程受到选择预先节点选择控制的区块链，在系统建立前就预先决定记账节点分布与其他节点状态。<br><strong>**</strong>3.3.3 许可链<strong>**</strong><br> 是指每个节点加入区块链需要取得许可的一种区块链种类。<br><strong>**</strong>3.3.4 混合链和复杂链<strong>**</strong><br>伴随着区块链技术发展，链中每个节点可以根据不同需要通过权限控制其功能，比如在同一个系统中，有的节点记账，有的节点可以查询整个链信息，有的节点只能查询部分信息，从而构成了一个复杂但高效的区块链网络。<br><strong>4.总论</strong><br>区块链初步理论体系记录到此结束了，但智能合约部分暂未记录，还在研究，在后续会进行更新完成。从目前收集资料上来看，区块链技术的确有对互联网进行变革的潜力，其价值转移互联网一旦成型，将会对目前的信息网络带来更多积极的影响，值得关注。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1681,7 +1758,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
