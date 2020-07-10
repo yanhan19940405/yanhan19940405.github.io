@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="本文关键字： Seq2Seq，Attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+NLG,即为文本生成领域，英文全称为Natural Language Generation。该领域常见于机器翻译、对话系统、阅读理解、序列标注等任务。本文将尽可能对该领域常用技术理论进行总结。此外，由于从模型结构角度理解seq2seq并不全面，本文将从模型">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Seq2Seq到NLG">
+<meta property="og:url" content="http://yoursite.com/2020/07/10/从Seq2Seq到NLG/index.html">
+<meta property="og:site_name" content="VKYH-2017-8-17">
+<meta property="og:description" content="本文关键字： Seq2Seq，Attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+NLG,即为文本生成领域，英文全称为Natural Language Generation。该领域常见于机器翻译、对话系统、阅读理解、序列标注等任务。本文将尽可能对该领域常用技术理论进行总结。此外，由于从模型结构角度理解seq2seq并不全面，本文将从模型">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/40.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/41.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/42.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/43.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/44.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/45.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/46.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/47.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/48.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/49.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/50.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/51.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/52.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/53.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/54.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/55.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/56.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/57.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/58.jpg?raw=true">
+<meta property="og:image" content="https://github.com/yanhan19940405/imgclub/blob/master/59.jpg?raw=true">
+<meta property="og:updated_time" content="2020-07-10T10:39:28.489Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Seq2Seq到NLG">
+<meta name="twitter:description" content="本文关键字： Seq2Seq，Attention
+注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。
+NLG,即为文本生成领域，英文全称为Natural Language Generation。该领域常见于机器翻译、对话系统、阅读理解、序列标注等任务。本文将尽可能对该领域常用技术理论进行总结。此外，由于从模型结构角度理解seq2seq并不全面，本文将从模型">
+<meta name="twitter:image" content="https://github.com/yanhan19940405/imgclub/blob/master/40.jpg?raw=true">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/07/10/从Seq2Seq到NLG/"/>
+
+
+
+
+
+  <title>从Seq2Seq到NLG | VKYH-2017-8-17</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">VKYH-2017-8-17</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <h1 class="site-subtitle" itemprop="description">未实践之事，无评价之理。</h1>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/07/10/从Seq2Seq到NLG/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="VKYH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="VKYH-2017-8-17">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h2 class="post-title" itemprop="name headline">从Seq2Seq到NLG</h2>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-07-10T18:17:59+08:00">
+                2020-07-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文关键字： <strong>Seq2Seq</strong>，<strong>Attention</strong></p>
+<p>注意：如果看不到本文图片或者图片未能完全加载，请链接VPN翻墙或者更改HOST文件切换代理。</p>
+<p>NLG,即为文本生成领域，英文全称为Natural Language Generation。该领域常见于机器翻译、对话系统、阅读理解、序列标注等任务。本文将尽可能对该领域常用技术理论进行总结。此外，由于从模型结构角度理解seq2seq并不全面，本文将从模型具体应用过程进行理论阐述，以便于读者更好的了解该领域常规方法。</p>
+<p><strong>1、seq2seq模型目标函数</strong></p>
+<p>NLG中常规方法即为Seq2Seq模型。该模型是一种端到端的模型结构，模型结构如下图所示，</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/40.jpg?raw=true" alt="图1 "></p>
+<p>其包含要素为起始序列（Source Sequence）、Encoder-Decoder模型结构、目标序列（Target Sequence）。其中Encoder（编码器）端作为模型重要的特征提取器，作用是将起始序列编码成相应的语义向量c(Context Vector)，Decoder（解码器）端主要利用Encoder端的语义向量和解码器本身的隐层向量完成序列预测过程。</p>
+<p>其训练的目标数学原理也较为直观，假设存在X={x1,x2,x3,x4,…,xn}作为起始序列，Y={y1,y2,y3,y4,…,yn}作为目标序列,同时训练过程中存在多组训练句子构成的数据集(X,Y)={(X1,Y1),(X2,Y2),…,(X3,Y3)}，则对于每一个句子的训练与预测过程而言，将是追求概率P(Y|X)达到最优解的过程。具体目标函数表达式如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/41.jpg?raw=true" alt="图2 "></p>
+<p>对两边取对数log运算,并通过极大似然处理以后，便得到了最终目标函数：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/42.jpg?raw=true" alt="图3 "></p>
+<p>式子中θ即为训练参数，n表示句子数目。此时对于单个句子预测条件概率P(Y|X)而言，将通过贝叶斯乘法公式与句子中字词分布概率产生联系。若以（X,Y）某一个句子对举例而言，数学过程如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/43.jpg?raw=true" alt="图4 "></p>
+<p>以上过程便将句子层级的概率求解与文本内部字词概率分布产生了关联，从而对模型训练过程提供了数学指引。</p>
+<p><strong>2、初始seq2seq训练过程</strong></p>
+<p>Seq2Seq模型运用过程主要包含训练阶段（Training）与推断阶段（Inference）。其中，Seq2Seq模型刚提出来的时候，其训练过程如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/44.jpg?raw=true" alt="图5"></p>
+<p> 图中，以机器翻译任务为例，在模型训练过程中首先将目标序列（Target Seq）进行数据预处理，添加序列起始符号<sos>和序列终止符号<eos>。后续过程中，将起始序列输入到词嵌入层完成查表操作后，后续通过Encoder模型结构编码成相应的context vector。图中以GRU网络作为特征提取器为示例，则将使用第K个时间步输出的隐层向量H(K)作为context vector的特征表征进行输出。后续decoder端将利用context vector和前一时刻输入的目标序列字词信息预测下一个时刻目标序列信息。该训练过程中，目标序列和起始序列都经过权值共享的预训练词向量模型进行嵌入处理，从而确保模型词向量维度统一。在模型decoder阶段，初始输入的<sos>词向量也经过词向量模型嵌入产生。</sos></eos></sos></p>
+<p>  该模型训练方法较为直接，但也存在一个很大的问题。如果模型decoder阶段在进行预测时，中间某一步出现错误，则会导致后续预测过程全部产生错误，最终导致整个模型由于错误预测序列信息从而学习到偏差较大的权重，从而影响模型效果。鉴于此模型将引入teacher forcing机制进行训练过程改革。Teacher forcing机制如下所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/45.jpg?raw=true" alt="图6"></p>
+<p>Teacher Forcing机制是在训练过程中，在decoder端将第T时刻的目标序列作为输入，将第T+1时刻的目标序列作为标签进行训练。在模型结构中，将引入softmax层将decoder获得的句子隐层状态量转化为字词分布概率，从而与T+1时刻的序列值对齐。最后，该过程将仅仅存在于训练阶段，在推断阶段并不存在此机制。</p>
+<p>此外，在该机制训练过程中，可能存在decoder端模型输出预测序列字符与真实字符不一致情况，扩大训练误差。鉴于此将可以采取Scheduled Sampling策略。在该策略中，若某一个时间步模型输出序列字符和真实字符不相等时，便将从真实的字符与模型输出字符中，通过掷硬币的方式（或者一种50%几率的随机决策过程），选取一个字符作为下一个时间步的输入。该策略过程如下图所示。</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/46.jpg?raw=true" alt="图7"></p>
+<p><strong>3、初始seq2seq推断预测过程</strong></p>
+<p> 在seq2seq模型推断过程中，由于缺少目标序列作为输入，因此teacher forcing机制将无法使用。该模型推断步骤包含GreedySeqrch、BeamSearch、Random Sample三种方式。其中Greedy Search方法如下图所示:</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/47.jpg?raw=true" alt="图8"></p>
+<p>在解码过程中，decoder端输入encoder端编码的到的隐层向量（图中未画出此部分）<br>和目标序列初始时刻的起始编码<sos>向量后，decoder端模型将从第一个时间步开始解析向量，然后得到相应的隐藏层S，后续通过softmax处理，将其此时隐藏状态矩阵内部可能被划分为各个类别的目标词概率预测出来，后续将选择概率最大值输出，从而作为预测序列的最终输出值。在该过程中，decode model通常使用RNN系列模型，<sos>标识符向量再有的方案中采用随机初始化进行处理。当decoder端第一个时间步预测过程结束后，将会把此时模型解析出的的隐藏状态值S0作为下一个时间步的初始输入，后续过程将与此前过程一致，不在详述。待解析到最终出现<eos>标识符时候便终止预测过程。若将推断过程用树形结构表示出来，则如下图所示:</eos></sos></sos></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/48.jpg?raw=true" alt="图9"></p>
+<p>图中每一层树表示一个时间步解析过程，而红色的解析方向即为模型最优解，即红色解析路线能使得模型产生的目标序列概率达到最大。但该方法也存在较大问题，即在每一步解析过程需要选择满足最大概率分配的词进行输出，这种通过局部最优解产生全局最优解的贪心策略，其本质上并未能从整体最优上考虑，因此很难确保结果是全局最优状态。比如若某几个时间步预测概率较大，接近于1，而其他几步概率较小，则此方法解析过程得到的最优解很可能并不是接近于真实值的预测结果，将会存在较大误差。最终导致产生的序列缺乏语义连贯性。</p>
+<p>鉴于此，是时候让BeamSearch机制上了！BeamSearch机制如下图所示:</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/49.jpg?raw=true" alt="图10"></p>
+<p>BeamSeach机制需要设置一个参数Beam size值，设为K（或者B），其物理意义表示每个时间步中条件概率较大的TOP K个结果。如上图所示，对于为”ABC”的目标序列而言，第一个时间步挑选3个最优概率值参与下一步decoder解析过程，当时间步T=2<br>时，此时从9种解析情况中选取条件概率排名前3（图中标红色的项）的继续参与后续过程，待最后输出K个最优解。最终预测得到的序列将从这K个最优解中进行选择。从检索过程而言，当K=1时，BeamSearch过程也就是Greedy过程。但当K!=1时，其检索空间大于Greedy Search方法，从而易于寻找全局最优解。</p>
+<p>除此以外还有一种解码策略Random Sampling。该策略与Greedy search类似，唯一的区别在于decoder每一个时间步解码生成字词分布概率时，将不在选择概率最大的单词输出，而是随机采样输出某一个字词作为预测序列字词。具体流程如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/50.jpg?raw=true" alt="图11"></p>
+<p><strong>4、带注意力机制的seq2seq模型</strong></p>
+<p>伴随着注意力机制发展，将seq2seq模型与注意力机制结合起来也逐步拥有了良好的理论基础。Seq2Seq与注意力机制结合的方案类别较多，本文将选取几个常见的进行阐述。首先，对于内部注意力机制而言，seq2seq模型中可以在Encoder端加入自注意力机制，从而提升encoder端文本特征提取能力，本文将不在详述，模型结构如Transformer一样。但有一点需要注意，当时用自注意力机制时，需要加入位置特征向量来记录原始序列中每一个分词的位置。此外在decoder端使用自注意力机制时，为了避免序列解码过程中受到后面时间步的文本信息影响，则需要加入MASK机制，具体如下图所示：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/51.jpg?raw=true" alt="图12"></p>
+<p>以序列“ABC<eos>”为例子，当时用自注意力机制时，对于将序列按顺序输入模型，等价于RNN中每一个时间步输入一个字词信息。则若以A词为例，为了避免匹配过程中受到A后续的分词信息影响，从而需要设置图中三角矩阵进行优化处理。而对于外部注意力机制而言，其中一种方案如下所示：</eos></p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/52.jpg?raw=true" alt="图13"></p>
+<p>注意力机制计算过程如下：</p>
+<blockquote>
+<ul>
+<li><p>1、假设模型从Encoder端输出hidden State向量为=(X(0),X(1),X(2),…,X(T)),假设当前decoder端解析得到的hidden state 为S0。</p>
+</li>
+<li><p>2、首先将S0与每一个时间步的Encoder端hidden staten向量进行相似度匹配，计算相似性分数，从而得到向量Score(S0,X(t))=((S0,X0),(S0,X1),(S0,X2),…,(S0,XT))<br>相似性分数计算方法如下所示：（ 式子中V、W1、W2为模型训练过程中待学习参数。）</p>
+</li>
+</ul>
+</blockquote>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/53.jpg?raw=true" alt="图14"></p>
+<blockquote>
+<ul>
+<li>3、通过softmax计算将分数转化为具体相似性权值矩阵a。</li>
+</ul>
+</blockquote>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/54.jpg?raw=true" alt="图15"></p>
+<blockquote>
+<ul>
+<li>4、利用注意力权值矩阵a进行加权求和，得到句子层级的context vector(C)。数学计算过程如下:</li>
+</ul>
+</blockquote>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/55.jpg?raw=true" alt="图16"></p>
+<blockquote>
+<ul>
+<li>5、最后得到decoder下一个时刻隐藏状态值S1=F(S0,Y0,C),该位置输出为G(Y0,S0,C),其中G，F为激活函数</li>
+</ul>
+</blockquote>
+<p>最后以机器翻译为例，附上一副全局的带注意力机制的seq2seq模型过程图：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/56.jpg?raw=true" alt="图17"></p>
+<p><strong>5、模型评估指标</strong></p>
+<p>在文本生成任务中，常用模型评价指标为BLEU、Rouge系列。则假设在某个文本生成项目中，模型生成序列为G,真实序列为S，则此部分内容将以上述例子进行阐述。对于BlEU指标而言，首先根据下列公式计算S序列与G序列n-gram词组彼此匹配（Match）的准确率。（此处匹配的定义为模型生成序列S中的N-Gram词组出现在真实序列G中的情况）：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/57.jpg?raw=true" alt="图18"></p>
+<p>此外若生成序列G长度远远小于S，则将会产生如下惩罚因子：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/58.jpg?raw=true" alt="图19"></p>
+<p>则最终BLEU指标计算方法如下：</p>
+<p><img src="https://github.com/yanhan19940405/imgclub/blob/master/59.jpg?raw=true" alt="图20"></p>
+<p>BLEU是站在Precision角度来计算N-gram词组准确率，而另一种站在Recall角度来计算N-gram词组找回来吧的常用评估标准为Rouge，由于成稿时间限制，细节不在阐述，待后面补全。<br>本文到此就暂时结束了，NLG领域最具有灵魂的当属对话系统，这期间还涉及到强化学习应用过程，期待后面能够掌握更多的技术来完善本文！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/01/一文解读Synthetic-attention机制/" rel="next" title="一文解读Synthetic-attention机制">
+                <i class="fa fa-chevron-left"></i> 一文解读Synthetic-attention机制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+  <div id="lv-container" data-id="city" data-uid=""></div>
+      
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="VKYH" />
+          <p class="site-author-name" itemprop="name">VKYH</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+           
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">VKYH</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.2</div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
